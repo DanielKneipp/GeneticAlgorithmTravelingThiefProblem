@@ -1,0 +1,12 @@
+#ifndef TTPCROSSINGMETHODS_HPP
+#define TTPCROSSINGMETHODS_HPP
+
+namespace TTPCrossingMethod
+{
+
+
+
+}
+
+#endif // TTPCROSSINGMETHODS_HPP
+

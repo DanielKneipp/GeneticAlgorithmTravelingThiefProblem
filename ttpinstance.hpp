@@ -3,17 +3,19 @@
 
 #include <string>
 #include <fstream>
-#include <memory>
+#include <iostream>
+#include <vector>
+#include <stdexcept>
 
+#include "problem.hpp"
+#include "ttpindividual.hpp"
 #include "item.hpp"
 #include "city.hpp"
 
 
-class TTPInstance
+class TTPInstance : public Problem< TTPIndividual >
 {
-public:
-    /** Specify if the problem is already loaded from a file. */
-    bool isLoaded;
+public:    
     /** Number of cities. */
     unsigned long numCities;
     /** Number of items. */
@@ -27,9 +29,9 @@ public:
     /** Renting ratio (R). */
     float rentingRatio;
     /** Array of cities. */
-    std::unique_ptr< City[] > cities;
+    std::vector< City > cities;
     /** Array of items */
-    std::unique_ptr< Item[] > items;
+    std::vector< Item > items;
 
     /**
      * @brief TTPInstance   Constructor.
@@ -41,15 +43,7 @@ public:
      *                      no TTP is loaded, all variables are set to \c 0 and the arrays
      *                      are not allocated.
      */
-    TTPInstance( std::string fileName = "" );
-
-    /**
-     * @brief   readProblem     Load a TTP from file.
-     *
-     * @param   fileName        File that specify the TTP.
-     */
-    void readProblem( std::string fileName );
-
+    TTPInstance( const std::string& fileName = "" );
 };
 
 #endif // TTPINSTANCE_H

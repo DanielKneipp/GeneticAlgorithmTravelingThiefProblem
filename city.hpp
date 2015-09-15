@@ -2,6 +2,7 @@
 #define CITY_H
 
 #include <cmath>
+#include <stdexcept>
 
 class City
 {
@@ -34,6 +35,13 @@ public:
      * @return              Distance from this city to \ref dst city.
      */
     float euclDistTo( City& dst );
+
+    /**
+     * @brief calcPwRatio   Calculate the ratio between the \ref totalProfit and
+     *                      \ref totalWeight. If \ref totalWeight is equal to 0,
+     *                      than a std::overflow_error exception will be throwed.
+     */
+    void  calcPwRatio();
 };
 
 #endif // CITY_H
