@@ -6,14 +6,16 @@
 
 #include "problem.cpp"
 
-template< typename T >
+template< class T >
 class Problem
 {
 public:
     /** Specify if the problem is already loaded from a file. */
     bool isLoaded;
 
-
+    /**
+     * @brief Problem           Constructor.
+     */
     Problem();
     /**
      * @brief   readProblem     Load a Problem from file.
@@ -21,9 +23,19 @@ public:
      * @param   fileName        File that specify the Problem.
      */
     virtual void readProblem( std::string& fileName ) = 0;
-
-    virtual void evaluateIndividual( T& Individual ) = 0;
-
+    /**
+     * @brief evaluateIndividual    Evaluate the individual and set
+     *                              his fitness (the indivudla must have
+     *                              a \c public \c float variable with the name \c fitness).
+     *
+     * @param Individual            Individual that will be evaluated.
+     */
+    virtual void evaluateIndividual( T& individual ) = 0;
+    /**
+     * @brief evaluateIndividuals   Evaluate a lot of individuals using
+     *                              {@ref evaluateIndividual( T& )} method.
+     * @param population
+     */
     virtual void evaluateIndividuals( std::vector< T >& population );
 
 };

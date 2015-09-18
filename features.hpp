@@ -7,8 +7,15 @@
 class Features
 {
 public:
+    /**
+     * @brief Features  Constructor.
+     */
     Features();
-
+    /**
+     * @brief toString  Used to get a \c string representation of the features.
+     *
+     * @return          a \c string representation of the features.
+     */
     virtual std::string toString() = 0;
 };
 

@@ -5,25 +5,25 @@ Individual::Individual() : fitness( 0.0 )
 
 }
 
-template< typename T >
+template< class T >
 bool Individual::operator < ( const Individual< T > &i )
 {
     return this->fitness < i.fitness;
 }
 
-template< typename T >
+template< class T >
 bool Individual::operator <= ( const Individual< T > &i )
 {
     return this->fitness <= i.fitness;
 }
 
-template< typename T >
+template< class T >
 bool Individual::operator > ( const Individual< T > &i )
 {
     return this->fitness > i.fitness;
 }
 
-template< typename T >
+template< class T >
 bool Individual::operator >= ( const Individual< T > &i )
 {
     return this->fitness >= i.fitness;

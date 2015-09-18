@@ -10,6 +10,9 @@
 class TTPGA : EvolutionaryOptimizer< TTPIndividual, TTPInstance >
 {
 public:
+    /**
+     * @brief TTPGA     Constructor.
+     */
     TTPGA();
 };
 

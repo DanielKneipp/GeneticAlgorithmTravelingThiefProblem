@@ -1,13 +1,13 @@
 #include "selectionmethods.hpp"
 
-template< typename T >
+template< class T >
 void SelectionMethod::tournament( unsigned short size,
                                   std::vector< T >& population )
 {
 
 }
 
-template< typename T >
+template< class T >
 void SelectionMethod::fightClub( unsigned short size,
                                  std::vector< T >& population )
 {

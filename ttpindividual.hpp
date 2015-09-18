@@ -7,6 +7,9 @@
 class TTPIndividual : public Individual< TTPIndividualFeatures >
 {
 public:
+    /**
+     * @brief TTPIndividual     Constructor.
+     */
     TTPIndividual();
 };
 

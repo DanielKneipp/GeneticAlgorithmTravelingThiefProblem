@@ -10,7 +10,7 @@ void TTPGA::run()
 
 }
 
-std::vector< TTPIndividual > TTPGA::generatePopulation( numIndividuals )
+std::vector< TTPIndividual > TTPGA::generatePopulation( unsigned numIndividuals )
 {
 
 }

@@ -8,11 +8,11 @@
 namespace SelectionMethod
 {
 
-template< typename T >
+template< class T >
 void tournament( unsigned short size,
                  std::vector< T >& population );
 
-template< typename T >
+template< class T >
 void fightClub( unsigned short size,
                 std::vector< T >& population );
 }

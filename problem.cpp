@@ -5,7 +5,7 @@ Problem::Problem()
 
 }
 
-template< typename T >
+template< class T >
 void Problem::evaluateIndividuals( std::vector< T >& population )
 {
     for( T& individual : population )
