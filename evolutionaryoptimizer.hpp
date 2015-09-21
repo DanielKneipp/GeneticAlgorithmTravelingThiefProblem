@@ -42,6 +42,10 @@ public:
      */
     EvolutionaryOptimizer();
     /**
+     * @brief ~EvolutionaryOptimizer    Destructor
+     */
+    ~EvolutionaryOptimizer();
+    /**
      * @brief startTimer                Start the timer.
      */
     void startTimer();

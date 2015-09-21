@@ -50,7 +50,7 @@ void TTPInstance::readProblem( const std::string& fileName )
             else if( tmpString == "RATIO:" )
             {
                 file >> tmpString;
-                this->rentingRatio = std::stof( tmpString );
+                this->rentingRate = std::stof( tmpString );
             }
             else if( tmpString == "Y):" ) // start enumerating all the cities
             {
@@ -85,10 +85,12 @@ void TTPInstance::readProblem( const std::string& fileName )
                 break; // break the while loop -> file parsing done.
             }
         } // end_while
+
         this->isLoaded = true;
         file.close();
     }
-    // Calcule the pwRatio
+
+    // Calculate the pwRatio.
     for( unsigned long i = 1; i <= this->numCities; i++ )
     {
         try
@@ -100,4 +102,60 @@ void TTPInstance::readProblem( const std::string& fileName )
             std::cerr << e.what() << std::endl;
         }
     }
+
+    // Calculate the number of items per city.
+    // -1 to remove the first city (that don't have items).
+    this->numItemsPerCity = this->numItems / ( this->numCities - 1 );
+}
+
+void TTPInstance::evaluateIndividual( TTPIndividual& individual )
+{
+    float fitness = 0.0;
+    const float v = ( this->speedMax - this->speedMin ) / static_cast< double >( this->knapCapacity );
+
+    unsigned long totalValue = 0;
+    unsigned long totalWeight = 0;
+    float totalPenalty = 0.0;
+
+    for( size_t i = 1; i <= this->numItems; i++ )
+    {
+        totalValue += this->items[ i ].profit * individual.features.pickingPlan[ i ];
+    }
+
+    // Get the penalty of the first city to the second that the totalWeight is 0.
+    totalPenalty += this->cities[ i ].euclDistTo( this->cities[ i + 1 ] ) / ( this->speedMax );
+    for( size_t i = 2; i <= this->numCities - 1; i++ )
+    {
+        // Calculate the total weight of the picked items in the city i.
+        for( size_t k = 1; k <= this->numItemsPerCity; k++ )
+        {
+            const size_t itemPos = ( this->numItemsPerCity * ( i - 1 ) ) + k;
+            totalWeight += this->items[ itemPos ].weight * individual.features.pickingPlan[ itemPos ];
+        }
+
+        totalPenalty += this->cities[ i ].euclDistTo( this->cities[ i + 1 ] ) /
+                        ( this->speedMax - v * static_cast< double >( totalWeight ) );
+    }
+    // Calculate the total weight of the picked items in the last city.
+    for( size_t k = 1; k <= this->numItemsPerCity; k++ )
+    {
+        const size_t itemPos = ( this->numItemsPerCity * ( this->numCities - 1 ) ) + k;
+        totalWeight += this->items[ itemPos ].weight * individual.features.pickingPlan[ itemPos ];
+    }
+    totalPenalty += this->cities[ this->numCities ].euclDistTo( this->cities[ 1 ] ) /
+                    ( this->speedMax - v * static_cast< double >( totalWeight ) );
+
+    fitness = totalValue - this->rentingRatio * totalPenalty;
+    fitness += TTPInstance::penalizatioMethod( totalWeight );
+
+    individual.fitness = fitness;
+}
+
+float TTPInstance::penalizatioMethod( unsigned long totalWeight )
+{
+    float penalization = 0.0;
+
+    penalization = 1000 * std::pow( std::max( totalWeight - this->knapCapacity, 0 ), 3 );
+
+    return penalization;
 }

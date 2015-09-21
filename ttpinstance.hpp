@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <stdexcept>
+#include <cmath>
 
 #include "problem.hpp"
 #include "ttpindividual.hpp"
@@ -15,19 +16,34 @@
 
 class TTPInstance : public Problem< TTPIndividual >
 {
+private:
+    /**
+     * @brief penalizatioMethod     Method that penalizies the individual
+     *                              if he passes tha knapsack capacity.
+     *
+     * @param totalWeight           The total weight of the items picked
+     *                              by the individual.
+     *
+     * @return                      Value of the penalization/
+     */
+    static float penalizatioMethod( unsigned long totalWeight );
+
+
 public:    
     /** Number of cities. */
     unsigned long numCities;
     /** Number of items. */
     unsigned long numItems;
+    /** Number of items per city */
+    unsigned long numItemsPerCity;
     /** Knapsack capacity (W). */
     unsigned long knapCapacity;
     /** Maximal speed (Vmax). */
     float speedMax;
     /** Minimal speed (Vmin). */
     float speedMin;
-    /** Renting ratio (R). */
-    float rentingRatio;
+    /** Renting rate (R). */
+    float rentingRate;
     /** Array of cities. */
     std::vector< City > cities;
     /** Array of items */
@@ -44,6 +60,14 @@ public:
      *                      are not allocated.
      */
     TTPInstance( const std::string& fileName = "" );
+    /**
+     * @brief evaluateIndividual    Evaluate the individual and set
+     *                              his fitness. Cost funtion used is in:
+     *                              A Comprehensive Benchmark Set and Heuristics.
+     *
+     * @param individual            \ref TTPIndividual that will be evaluated.
+     */
+    void evaluateIndividual( TTPIndividual& individual );
 };
 
 #endif // TTPINSTANCE_H

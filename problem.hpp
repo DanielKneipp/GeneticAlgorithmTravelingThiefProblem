@@ -18,6 +18,10 @@ public:
      */
     Problem();
     /**
+     * @brief ~Problem          Destructor.
+     */
+    virtual ~Problem();
+    /**
      * @brief   readProblem     Load a Problem from file.
      *
      * @param   fileName        File that specify the Problem.
@@ -25,7 +29,7 @@ public:
     virtual void readProblem( std::string& fileName ) = 0;
     /**
      * @brief evaluateIndividual    Evaluate the individual and set
-     *                              his fitness (the indivudla must have
+     *                              his fitness (the individual must have
      *                              a \c public \c float variable with the name \c fitness).
      *
      * @param Individual            Individual that will be evaluated.
@@ -34,7 +38,8 @@ public:
     /**
      * @brief evaluateIndividuals   Evaluate a lot of individuals using
      *                              {@ref evaluateIndividual( T& )} method.
-     * @param population
+     *
+     * @param population            Array of individuals.
      */
     virtual void evaluateIndividuals( std::vector< T >& population );
 

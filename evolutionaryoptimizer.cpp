@@ -2,6 +2,8 @@
 
 EvolutionaryOptimizer::EvolutionaryOptimizer() {}
 
+EvolutionaryOptimizer::~EvolutionaryOptimizer() {}
+
 void EvolutionaryOptimizer::startTimer()
 {
     this->startTime = std::chrono::steady_clock::now();

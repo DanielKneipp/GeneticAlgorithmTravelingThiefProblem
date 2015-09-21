@@ -5,6 +5,11 @@ Problem::Problem()
 
 }
 
+Problem::~Problem()
+{
+
+}
+
 template< class T >
 void Problem::evaluateIndividuals( std::vector< T >& population )
 {

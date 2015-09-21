@@ -12,6 +12,10 @@ public:
      */
     Features();
     /**
+     * @brief ~Features  Destructor.
+     */
+    ~Features();
+    /**
      * @brief toString  Used to get a \c string representation of the features.
      *
      * @return          a \c string representation of the features.
