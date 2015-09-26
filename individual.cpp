@@ -1,9 +1,6 @@
 #include "individual.hpp"
 
-Individual::Individual() : fitness( 0.0 )
-{
-
-}
+Individual::Individual() : fitness( 0.0 ) {}
 
 template< class T >
 bool Individual::operator < ( const Individual< T >& i )

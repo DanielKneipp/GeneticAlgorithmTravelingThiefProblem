@@ -18,15 +18,15 @@ class TTPInstance : public Problem< TTPIndividual >
 {
 private:
     /**
-     * @brief penalizatioMethod     Method that penalizies the individual
+     * @brief penalizationMethod     Method that penalizies the individual
      *                              if he passes tha knapsack capacity.
      *
      * @param totalWeight           The total weight of the items picked
      *                              by the individual.
      *
-     * @return                      Value of the penalization/
+     * @return                      Value of the penalization.
      */
-    static float penalizatioMethod( unsigned long totalWeight );
+    static double penalizationMethod( unsigned long totalWeight );
 
 
 public:    
@@ -39,11 +39,11 @@ public:
     /** Knapsack capacity (W). */
     unsigned long knapCapacity;
     /** Maximal speed (Vmax). */
-    float speedMax;
+    double speedMax;
     /** Minimal speed (Vmin). */
-    float speedMin;
+    double speedMin;
     /** Renting rate (R). */
-    float rentingRate;
+    double rentingRate;
     /** Array of cities. */
     std::vector< City > cities;
     /** Array of items */

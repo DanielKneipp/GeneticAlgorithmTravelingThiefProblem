@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     selectionmethods.cpp \
     ttpmutationmethods.cpp \
     ttpcrossingmethods.cpp \
-    individualrecorder.cpp
+    individualrecorder.cpp \
+    geneticutils.cpp
 
 HEADERS += \
     item.hpp \
@@ -33,7 +34,8 @@ HEADERS += \
     selectionmethods.hpp \
     ttpmutationmethods.hpp \
     ttpcrossingmethods.hpp \
-    individualrecorder.hpp
+    individualrecorder.hpp \
+    geneticutils.hpp
 
 DISTFILES += \
     .gitignore

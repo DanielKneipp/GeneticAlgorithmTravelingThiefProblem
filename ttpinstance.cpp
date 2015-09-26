@@ -54,8 +54,8 @@ void TTPInstance::readProblem( const std::string& fileName )
             }
             else if( tmpString == "Y):" ) // start enumerating all the cities
             {
-                this->cities = std::vector< City >( this->numCities + 1 ); // skip 0
-                for( unsigned long i = 1; i != this->numCities + 1; i++ )
+                this->cities = std::vector< City >( this->numCities );
+                for( unsigned long i = 0; i < this->numCities; i++ )
                 {
                     this->cities[ i ].index = i;
                     file >> tmpString; // index
@@ -69,8 +69,8 @@ void TTPInstance::readProblem( const std::string& fileName )
             }
             else if( tmpString == "NUMBER):" ) // start enumerating all the items
             {
-                this->items = std::vector< Item >( this->numItems + 1 ); // skip 0
-                for( unsigned long i = 1; i != this->numItems + 1; i++ )
+                this->items = std::vector< Item >( this->numItems );
+                for( unsigned long i = 0; i < this->numItems; i++ )
                 {
                     file >> tmpString; // index
                     file >> tmpString;
@@ -91,7 +91,7 @@ void TTPInstance::readProblem( const std::string& fileName )
     }
 
     // Calculate the pwRatio.
-    for( unsigned long i = 1; i <= this->numCities; i++ )
+    for( unsigned long i = 0; i < this->numCities; i++ )
     {
         try
         {
@@ -110,26 +110,28 @@ void TTPInstance::readProblem( const std::string& fileName )
 
 void TTPInstance::evaluateIndividual( TTPIndividual& individual )
 {
-    float fitness = 0.0;
-    const float v = ( this->speedMax - this->speedMin ) / static_cast< double >( this->knapCapacity );
+    double fitness = 0.0;
+    const double v = ( this->speedMax - this->speedMin ) / static_cast< double >( this->knapCapacity );
 
     unsigned long totalValue = 0;
     unsigned long totalWeight = 0;
-    float totalPenalty = 0.0;
+    double totalPenalty = 0.0;
 
-    for( size_t i = 1; i <= this->numItems; i++ )
+    // Get the total profit.
+    for( unsigned long i = 0; i < this->numItems; i++ )
     {
         totalValue += this->items[ i ].profit * individual.features.pickingPlan[ i ];
     }
 
     // Get the penalty of the first city to the second that the totalWeight is 0.
-    totalPenalty += this->cities[ i ].euclDistTo( this->cities[ i + 1 ] ) / ( this->speedMax );
-    for( size_t i = 2; i <= this->numCities - 1; i++ )
+    totalPenalty += this->cities[ 0 ].euclDistTo( this->cities[ 1 ] ) / ( this->speedMax );
+    for( unsigned long i = 1; i < this->numCities - 1; i++ )
     {
         // Calculate the total weight of the picked items in the city i.
-        for( size_t k = 1; k <= this->numItemsPerCity; k++ )
+        for( unsigned long k = 0; k < this->numItemsPerCity; k++ )
         {
-            const size_t itemPos = ( this->numItemsPerCity * ( i - 1 ) ) + k;
+            // -1 because the first line of items references to city 2.
+            const unsigned long itemPos = ( this->numItemsPerCity * ( i - 1 ) ) + k;
             totalWeight += this->items[ itemPos ].weight * individual.features.pickingPlan[ itemPos ];
         }
 
@@ -137,12 +139,12 @@ void TTPInstance::evaluateIndividual( TTPIndividual& individual )
                         ( this->speedMax - v * static_cast< double >( totalWeight ) );
     }
     // Calculate the total weight of the picked items in the last city.
-    for( size_t k = 1; k <= this->numItemsPerCity; k++ )
+    for( unsigned long k = 0; k < this->numItemsPerCity; k++ )
     {
-        const size_t itemPos = ( this->numItemsPerCity * ( this->numCities - 1 ) ) + k;
+        const unsigned long itemPos = ( this->numItemsPerCity * ( ( this->numCities - 1 ) - 1 ) ) + k;
         totalWeight += this->items[ itemPos ].weight * individual.features.pickingPlan[ itemPos ];
     }
-    totalPenalty += this->cities[ this->numCities ].euclDistTo( this->cities[ 1 ] ) /
+    totalPenalty += this->cities[ this->numCities - 1 ].euclDistTo( this->cities[ 0 ] ) /
                     ( this->speedMax - v * static_cast< double >( totalWeight ) );
 
     fitness = totalValue - this->rentingRatio * totalPenalty;
@@ -151,9 +153,9 @@ void TTPInstance::evaluateIndividual( TTPIndividual& individual )
     individual.fitness = fitness;
 }
 
-float TTPInstance::penalizatioMethod( unsigned long totalWeight )
+double TTPInstance::penalizationMethod( unsigned long totalWeight )
 {
-    float penalization = 0.0;
+    double penalization = 0.0;
 
     penalization = 1000 * std::pow( std::max( totalWeight - this->knapCapacity, 0 ), 3 );
 
