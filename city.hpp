@@ -34,7 +34,7 @@ public:
      *
      * @return              Distance from this city to \ref dst city.
      */
-    float euclDistTo( City& dst );
+    float euclDistTo( const City& dst );
 
     /**
      * @brief calcPwRatio   Calculate the ratio between the \ref totalProfit and

@@ -2,7 +2,6 @@
 #define TTPINDIVIDUAL_HPP
 
 #include <string>
-#include <sstream>
 
 #include "individual.hpp"
 #include "ttpindividualfeatures.hpp"
@@ -16,7 +15,7 @@ public:
     TTPIndividual();
 
     /**
-     * @brief operator <    Used to know if this individual is
+     * @brief operator >    Used to know if this individual is
      *                      worse than the individual {@ref i}.
      *
      * @param i             Individual that will be compared to this.
@@ -24,9 +23,9 @@ public:
      * @return              \c true if the fitness of this individual
      *                      is less than the fitness of {@ref i}.
      */
-    bool operator > ( const TTPIndividual& i );
+    bool operator > ( const Individual< TTPIndividualFeatures >& i );
     /**
-     * @brief operator <    Used to know if this individual is
+     * @brief operator >=   Used to know if this individual is
      *                      worse or equal than the individual {@ref i}.
      *
      * @param i             Individual that will be compared to this.
@@ -34,9 +33,9 @@ public:
      * @return              \c true if the fitness of this individual
      *                      is less or equal than the fitness of {@ref i}.
      */
-    bool operator >= ( const TTPIndividual& i );
+    bool operator >= ( const Individual< TTPIndividualFeatures >& i );
     /**
-     * @brief operator <    Used to know if this individual is
+     * @brief operator <=   Used to know if this individual is
      *                      better or equal than the individual {@ref i}.
      *
      * @param i             Individual that will be compared to this.
@@ -44,7 +43,7 @@ public:
      * @return              \c true if the fitness of this individual
      *                      is greater or equal than the fitness of {@ref i}.
      */
-    bool operator <= ( const TTPIndividual& i );
+    bool operator <= ( const Individual< TTPIndividualFeatures >& i );
     /**
      * @brief operator <    Used to know if this individual is
      *                      better than the individual {@ref i}.
@@ -54,14 +53,7 @@ public:
      * @return              \c true if the fitness of this individual
      *                      is greater than the fitness of {@ref i}.
      */
-    bool operator < ( const TTPIndividual& i );
-    /**
-     * @brief toString      Convert the individual into a textual
-     *                      representation.
-     *
-     * @return              String that represents the individual.
-     */
-    std::string toString();
+    bool operator < ( const Individual< TTPIndividualFeatures >& i );
 };
 
 #endif // TTPINDIVIDUAL_HPP

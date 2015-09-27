@@ -1,7 +1,3 @@
 #include "ttpindividualfeatures.hpp"
 
-TTPIndividualFeatures::TTPIndividualFeatures()
-{
-
-}
-
+TTPIndividualFeatures::TTPIndividualFeatures() {}

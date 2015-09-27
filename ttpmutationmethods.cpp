@@ -12,10 +12,11 @@ std::vector< TTPIndividual > TTPMutationMethod::twoOpt_bitFlip( const std::vecto
 
         //** 2-opt **//
         // Generating start and end cut points.
-        unsigned long beginPoint = GeneticUtils::genIntRandNumber( ( unsigned long )( 0 ),
-                                                                   individual.features.tour.size() - 2 );
-        unsigned long endPoint = GeneticUtils::genIntRandNumber( beginPoint + 1,
-                                                                 individual.features.tour.size() - 1 );
+        // Don't get the last and first city because they should be the first city (1).
+        unsigned long beginPoint = GeneticUtils::genIntRandNumber< unsigned long >( 1,
+                                                                                    individual.features.tour.size() - 3 );
+        unsigned long endPoint = GeneticUtils::genIntRandNumber< unsigned long >( beginPoint + 1,
+                                                                                  individual.features.tour.size() - 2 );
         // Swap.
         for( unsigned long i = beginPoint; i <= endPoint; i++ )
         {
@@ -26,7 +27,7 @@ std::vector< TTPIndividual > TTPMutationMethod::twoOpt_bitFlip( const std::vecto
         //** Bit flip **//
         for( unsigned long i = 0; i < mutatedIndividual.features.pickingPlan.size(); i++ )
         {
-            float randNum = GeneticUtils::genRealRandNumber( 0.f, 1.f );
+            float randNum = GeneticUtils::genRealRandNumber< float >( 0.f, 1.f );
             // TODO: The better the fitness, the less likely to turn the bit.
             if( randNum > 0.5 )
             {

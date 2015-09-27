@@ -30,37 +30,37 @@ public:
      * @param i             Individual that will be compared to this.
      *
      * @return              \c true if the fitness of this individual
-     *                      is less than the fitness of {@ref i}.
+     *                      is worse than the fitness of {@ref i}.
      */
     virtual bool operator < ( const Individual< T >& i );
     /**
-     * @brief operator <    Used to know if this individual is
+     * @brief operator <=   Used to know if this individual is
      *                      worse or equal than the individual {@ref i}.
      *
      * @param i             Individual that will be compared to this.
      *
      * @return              \c true if the fitness of this individual
-     *                      is less or equal than the fitness of {@ref i}.
+     *                      is worse or equal than the fitness of {@ref i}.
      */
     virtual bool operator <= ( const Individual< T >& i );
     /**
-     * @brief operator <    Used to know if this individual is
+     * @brief operator >=   Used to know if this individual is
      *                      better or equal than the individual {@ref i}.
      *
      * @param i             Individual that will be compared to this.
      *
      * @return              \c true if the fitness of this individual
-     *                      is greater or equal than the fitness of {@ref i}.
+     *                      is better or equal than the fitness of {@ref i}.
      */
     virtual bool operator >= ( const Individual< T >& i );
     /**
-     * @brief operator <    Used to know if this individual is
+     * @brief operator >    Used to know if this individual is
      *                      better than the individual {@ref i}.
      *
      * @param i             Individual that will be compared to this.
      *
      * @return              \c true if the fitness of this individual
-     *                      is greater than the fitness of {@ref i}.
+     *                      is better than the fitness of {@ref i}.
      */
     virtual bool operator > ( const Individual< T >& i );
     /**

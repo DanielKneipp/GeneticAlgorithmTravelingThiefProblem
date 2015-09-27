@@ -5,6 +5,7 @@
 #include <chrono>
 
 #include "problem.hpp"
+#include "geneticutils.hpp"
 
 #include "evolutionaryoptimizer.cpp"
 
@@ -13,7 +14,7 @@ class EvolutionaryOptimizer
 {
 protected:
     /** Individuals */
-    std::vector< T_ind > individuals;
+    std::vector< T_ind > population;
     /** Moment of the time that \ref startTimer() was executed. */
     std::chrono::time_point< std::chrono::steady_clock > startTime;
     /** Moment of the time that \ref stopTimer() was executed. */
@@ -44,7 +45,7 @@ public:
     /**
      * @brief ~EvolutionaryOptimizer    Destructor
      */
-    ~EvolutionaryOptimizer();
+    virtual ~EvolutionaryOptimizer();
     /**
      * @brief startTimer                Start the timer.
      */
@@ -59,7 +60,8 @@ public:
     /**
      * @brief run                       Execute the evolutionary solver method.
      */
-    virtual void run() = 0;
+    virtual void run( unsigned numIndividuals,
+                      unsigned numGenerations = 0 ) = 0;
 };
 
 #endif // EVOLUTIONARYOPTIMIZER_HPP

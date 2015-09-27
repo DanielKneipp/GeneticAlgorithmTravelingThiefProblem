@@ -2,49 +2,57 @@
 
 TTPIndividual::TTPIndividual() {}
 
-bool TTPIndividual::operator < ( const TTPIndividual& i )
+bool TTPIndividual::operator < ( const Individual< TTPIndividualFeatures >& i )
 {
     return this->fitness > i.fitness;
 }
 
-bool TTPIndividual::operator <= ( const TTPIndividual& i )
+bool TTPIndividual::operator <= ( const Individual< TTPIndividualFeatures >& i )
 {
     return this->fitness >= i.fitness;
 }
 
-bool TTPIndividual::operator > ( const TTPIndividual& i )
+bool TTPIndividual::operator > ( const Individual< TTPIndividualFeatures >& i )
 {
     return this->fitness < i.fitness;
 }
 
-bool TTPIndividual::operator >= ( const TTPIndividual& i )
+bool TTPIndividual::operator >= ( const Individual< TTPIndividualFeatures >& i )
 {
     return this->fitness <= i.fitness;
 }
 
 std::string TTPIndividual::toString()
 {
-    std::stringstream outPut;
+    std::string outPut;
 
-    outPut << "{\n";
+    outPut += "{\n";
 
-    outPut << "\"tour\" : [ ";
-    for( auto&& city : this->features.tour )
+    outPut += "\"tour\" : [ ";
+    if( this->features.tour.size() > 0 )
     {
-        outPut << std::to_string( city ) << ", ";
+        for( auto&& city : this->features.tour )
+        {
+            outPut += std::to_string( city ) += ", ";
+        }
+        outPut.pop_back();
     }
-    outPut << "],\n";
+    outPut += "],\n";
 
-    outPut << "\"pickingPlan\" : [ ";
-    for( auto&& item : this->features.pickingPlan )
+    outPut += "\"pickingPlan\" : [ ";
+    if( this->features.tour.size() > 0 )
     {
-        outPut << std::to_string( item ) << ", ";
+        for( auto&& item : this->features.pickingPlan )
+        {
+            outPut += std::to_string( item ) += ", ";
+        }
+        outPut.pop_back();
     }
-    outPut << "],\n";
+    outPut += "],\n";
 
-    outPut << "\"fitness\" : " << std::to_string( this->fitness ) << "\n";
+    outPut += "\"fitness\" : " += std::to_string( this->fitness ) += "\n";
 
-    outPut << "}";
+    outPut += "}";
 
-    return outPut.str();
+    return outPut;
 }
