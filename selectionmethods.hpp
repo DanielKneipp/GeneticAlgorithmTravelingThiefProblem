@@ -29,8 +29,6 @@ template< class T >
 std::vector< T > tournament( const unsigned long tournamentSize,
                              const unsigned long newPopulationSize,
                              const std::vector< T >& population );
-
-template< class T >
 /**
  * @brief fightClub             Uses the \ref tournament method to select
  *                              (\ref newPopulationSize - \ref numElites) solutions but
@@ -47,6 +45,7 @@ template< class T >
  *
  * @return                      The selected population.
  */
+template< class T >
 std::vector< T > fightClub( const unsigned long tournamentSize,
                             const unsigned long newPopulationSize,
                             const unsigned long numElites,
