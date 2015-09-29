@@ -1,7 +1,6 @@
 #include "ttpinstance.hpp"
 
-TTPInstance::TTPInstance( const std::string& fileName ) : isLoaded( false ),
-                                                          numCities( 0 ),
+TTPInstance::TTPInstance( const std::string& fileName ) : numCities( 0 ),
                                                           numItems( 0 ),
                                                           knapCapacity( 0 ),
                                                           speedMax( 0.0 ),
@@ -57,7 +56,7 @@ void TTPInstance::readProblem( const std::string& fileName )
                 this->cities = std::vector< City >( this->numCities );
                 for( unsigned long i = 0; i < this->numCities; i++ )
                 {
-                    this->cities[ i ].index = i;
+                    this->cities[ i ].index = i + 1;
                     file >> tmpString; // index
                     file >> tmpString;
                     this->cities[ i ].xCord = std::stoul( tmpString );
@@ -78,9 +77,9 @@ void TTPInstance::readProblem( const std::string& fileName )
                     file >> tmpString;
                     this->items[ i ].weight = std::stoul( tmpString );
                     file >> tmpString;
-                    this->items[ i ].inCity = std::stoul( tmpString );
-                    this->cities[ this->items[ i ].inCity ].totalProfit += this->items[ i ].profit;
-                    this->cities[ this->items[ i ].inCity ].totalWeight += this->items[ i ].weight;
+                    this->items[ i ].cityIndex = std::stoul( tmpString );
+                    this->cities[ this->items[ i ].cityIndex - 1 ].totalProfit += this->items[ i ].profit;
+                    this->cities[ this->items[ i ].cityIndex - 1 ].totalWeight += this->items[ i ].weight;
                 }
                 break; // break the while loop -> file parsing done.
             }
@@ -91,7 +90,7 @@ void TTPInstance::readProblem( const std::string& fileName )
     }
 
     // Calculate the pwRatio.
-    for( unsigned long i = 0; i < this->numCities; i++ )
+    for( unsigned long i = 1; i < this->numCities; i++ )
     {
         try
         {
@@ -147,8 +146,17 @@ void TTPInstance::evaluateIndividual( TTPIndividual& individual )
     totalPenalty += this->cities[ this->numCities - 1 ].euclDistTo( this->cities[ 0 ] ) /
                     ( this->speedMax - v * static_cast< double >( totalWeight ) );
 
-    fitness = totalValue - this->rentingRatio * totalPenalty;
-    fitness += TTPInstance::penalizatioMethod( totalWeight );
+    // Note: The calculations assume that the total weight of picked items wont exceed
+    // the knapsack capacity, so if it happen the calculations should be disconsidered
+    // and a pure penalization be applied instead.
+    if( totalWeight > this->knapCapacity )
+    {
+        fitness = TTPInstance::penalizationMethod( totalWeight );
+    }
+    else
+    {
+        fitness = totalValue - this->rentingRate * totalPenalty;
+    }
 
     individual.fitness = fitness;
 }
@@ -157,7 +165,8 @@ double TTPInstance::penalizationMethod( unsigned long totalWeight )
 {
     double penalization = 0.0;
 
-    penalization = 1000 * std::pow( std::max( totalWeight - this->knapCapacity, 0 ), 3 );
+    penalization = 10000 + std::pow( std::max( totalWeight - this->knapCapacity,
+                                               ( unsigned long )( 0 ) ), 3 );
 
     return penalization;
 }

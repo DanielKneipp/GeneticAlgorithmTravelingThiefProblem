@@ -4,8 +4,6 @@
 #include <string>
 #include <vector>
 
-#include "problem.cpp"
-
 template< class T >
 class Problem
 {
@@ -26,7 +24,7 @@ public:
      *
      * @param   fileName        File that specify the Problem.
      */
-    virtual void readProblem( std::string& fileName ) = 0;
+    virtual void readProblem( const std::string& fileName ) = 0;
     /**
      * @brief evaluateIndividual    Evaluate the individual and set
      *                              his fitness (the individual must have
@@ -42,7 +40,8 @@ public:
      * @param population            Array of individuals.
      */
     virtual void evaluateIndividuals( std::vector< T >& population );
-
 };
+
+#include "problem.cpp"
 
 #endif // PROBLEM_HPP

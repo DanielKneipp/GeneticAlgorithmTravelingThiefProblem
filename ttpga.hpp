@@ -11,13 +11,30 @@
 #include "ttpmutationmethods.hpp"
 #include "selectionmethods.hpp"
 
-class TTPGA : EvolutionaryOptimizer< TTPIndividual, TTPInstance >
+class TTPGA : public EvolutionaryOptimizer< TTPIndividual, TTPInstance >
 {
+protected:
+    /**
+     * @brief generatePopulation    Generate the population. Commonly used to
+     *                              create the initial population.
+     *
+     * @param numIndividuals        Number of individuals that will be generated.
+     *
+     * @return                      The generated individuals.
+     */
+    virtual std::vector< TTPIndividual > generatePopulation( unsigned numIndividuals );
+
+
 public:
     /**
      * @brief TTPGA     Constructor.
      */
     TTPGA();
+    /**
+     * @brief run       Execute the evolutionary solver method.
+     */
+    virtual void run( unsigned numIndividuals,
+                      unsigned numGenerations = 0 );
 };
 
 #endif // TTPGA_HPP

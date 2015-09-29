@@ -29,9 +29,9 @@ std::vector< TTPIndividual > TTPMutationMethod::twoOpt_bitFlip( const std::vecto
         {
             float randNum = GeneticUtils::genRealRandNumber< float >( 0.f, 1.f );
             // TODO: The better the fitness, the less likely to turn the bit.
-            if( randNum > 0.5 )
+            if( randNum < 0.5 )
             {
-                mutatedIndividual.features.pickingPlan[ i ] ^= ( unsigned char )( 1 );
+                mutatedIndividual.features.pickingPlan[ i ] ^= ( unsigned short )( 1 );
             }
         }
 

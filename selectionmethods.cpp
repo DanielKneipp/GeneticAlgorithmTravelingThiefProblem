@@ -5,7 +5,7 @@ std::vector< T > SelectionMethod::tournament( const unsigned long tournamentSize
                                               const unsigned long newPopulationSize,
                                               const std::vector< T >& population )
 {
-    std::vector< T >selectedPopulation();
+    std::vector< T >selectedPopulation;
     selectedPopulation.reserve( newPopulationSize );
 
     unsigned long ring[ tournamentSize ];

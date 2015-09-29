@@ -13,47 +13,17 @@ public:
      * @brief TTPIndividual     Constructor.
      */
     TTPIndividual();
-
     /**
-     * @brief operator >    Used to know if this individual is
-     *                      worse than the individual {@ref i}.
-     *
-     * @param i             Individual that will be compared to this.
-     *
-     * @return              \c true if the fitness of this individual
-     *                      is less than the fitness of {@ref i}.
+     * @brief ~TTPIndividual    Destructor.
      */
-    bool operator > ( const Individual< TTPIndividualFeatures >& i );
+    ~TTPIndividual();
     /**
-     * @brief operator >=   Used to know if this individual is
-     *                      worse or equal than the individual {@ref i}.
+     * @brief toString      Convert the individual into a textual
+     *                      representation.
      *
-     * @param i             Individual that will be compared to this.
-     *
-     * @return              \c true if the fitness of this individual
-     *                      is less or equal than the fitness of {@ref i}.
+     * @return              String that represents the individual.
      */
-    bool operator >= ( const Individual< TTPIndividualFeatures >& i );
-    /**
-     * @brief operator <=   Used to know if this individual is
-     *                      better or equal than the individual {@ref i}.
-     *
-     * @param i             Individual that will be compared to this.
-     *
-     * @return              \c true if the fitness of this individual
-     *                      is greater or equal than the fitness of {@ref i}.
-     */
-    bool operator <= ( const Individual< TTPIndividualFeatures >& i );
-    /**
-     * @brief operator <    Used to know if this individual is
-     *                      better than the individual {@ref i}.
-     *
-     * @param i             Individual that will be compared to this.
-     *
-     * @return              \c true if the fitness of this individual
-     *                      is greater than the fitness of {@ref i}.
-     */
-    bool operator < ( const Individual< TTPIndividualFeatures >& i );
+    std::string toString() const ;
 };
 
 #endif // TTPINDIVIDUAL_HPP

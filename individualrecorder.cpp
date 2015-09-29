@@ -1,6 +1,6 @@
 #include "individualrecorder.hpp"
 
-IndividualRecorder::IndividualRecorder() : numIndRecorded( 0 ) {}
+IndividualRecorder::IndividualRecorder() : numRecordedInd( 0 ) {}
 
 void IndividualRecorder::setDestinationFile( const std::string& fileName )
 {

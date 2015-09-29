@@ -13,7 +13,6 @@
 #include "item.hpp"
 #include "city.hpp"
 
-
 class TTPInstance : public Problem< TTPIndividual >
 {
 private:
@@ -26,7 +25,7 @@ private:
      *
      * @return                      Value of the penalization.
      */
-    static double penalizationMethod( unsigned long totalWeight );
+    double penalizationMethod( unsigned long totalWeight );
 
 
 public:    
@@ -60,6 +59,12 @@ public:
      *                      are not allocated.
      */
     TTPInstance( const std::string& fileName = "" );
+    /**
+     * @brief   readProblem     Load a Problem from file.
+     *
+     * @param   fileName        File that specify the Problem.
+     */
+    void readProblem( const std::string& fileName );
     /**
      * @brief evaluateIndividual    Evaluate the individual and set
      *                              his fitness. Cost funtion used is in:

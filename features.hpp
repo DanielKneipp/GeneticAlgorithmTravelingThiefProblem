@@ -3,7 +3,6 @@
 
 #include <string>
 
-
 class Features
 {
 public:
@@ -20,7 +19,7 @@ public:
      *
      * @return          a \c string representation of the features.
      */
-    virtual std::string toString() = 0;
+    virtual std::string toString() const = 0;
 };
 
 #endif // FEATURES_HPP

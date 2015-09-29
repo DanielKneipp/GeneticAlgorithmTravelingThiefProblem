@@ -1,17 +1,13 @@
 #include "problem.hpp"
 
-Problem::Problem()
-{
-
-}
-
-Problem::~Problem()
-{
-
-}
+template< class T >
+Problem< T >::Problem() : isLoaded( false ) {}
 
 template< class T >
-void Problem::evaluateIndividuals( std::vector< T >& population )
+Problem< T >::~Problem() {}
+
+template< class T >
+void Problem< T >::evaluateIndividuals( std::vector< T >& population )
 {
     for( T& individual : population )
     {

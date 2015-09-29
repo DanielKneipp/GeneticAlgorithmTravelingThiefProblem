@@ -6,8 +6,6 @@
 
 #include "geneticutils.hpp"
 
-#include "selectionmethods.cpp"
-
 namespace SelectionMethod
 {
 
@@ -53,6 +51,6 @@ std::vector< T > fightClub( const unsigned long tournamentSize,
 
 }
 
+#include "selectionmethods.cpp"
 
 #endif // SELECTIONMETHODS
-

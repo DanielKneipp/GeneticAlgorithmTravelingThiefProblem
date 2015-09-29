@@ -5,8 +5,6 @@
 #include <limits>
 #include <cmath>    // std::nextafter
 
-#include "geneticutils.hpp"
-
 namespace GeneticUtils
 {
 
@@ -31,7 +29,21 @@ enum PROBLEM_TYPE
  * @return                      The random real number generated.
  */
 template< typename T >
-T genRealRandNumber( const T min, const T max );
+T genRealRandNumber( const T min, const T max )
+{
+    // Seed.
+    std::random_device rd;
+    // Seed being used to feed the random number generator.
+    std::mt19937 mt( rd() );
+    // Note: uniform_real_distribution does [min, max),
+    // but we want to do [min, max].
+    // Pass the next largest value instead.
+    std::uniform_real_distribution< T >dist( min,
+                                             std::nextafter( max,
+                                                             std::numeric_limits< T >::max() ) );
+
+    return dist( mt );
+}
 
 /**
  * @brief genIntRandNumber      Generate a random integer number between
@@ -44,7 +56,17 @@ T genRealRandNumber( const T min, const T max );
  * @return                      The random integer number generated.
  */
 template< typename T >
-T genIntRandNumber( const T min, const T max );
+T genIntRandNumber( const T min, const T max )
+{
+    // Seed.
+    std::random_device rd;
+    // Seed being used to feed the random number generator.
+    std::mt19937 mt( rd() );
+    // Generate a uniform integer random distribution on [min, max]
+    std::uniform_int_distribution< T >dist( min, max );
+
+    return dist( mt );
+}
 
 }
 

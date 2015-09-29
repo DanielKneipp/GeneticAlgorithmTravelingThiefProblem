@@ -6,8 +6,6 @@
 #include <iostream>
 #include <fstream>
 
-#include "individualrecorder.hpp"
-
 class IndividualRecorder
 {
 private:
