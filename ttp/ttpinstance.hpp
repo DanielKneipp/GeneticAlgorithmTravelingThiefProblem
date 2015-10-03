@@ -8,7 +8,7 @@
 #include <stdexcept>
 #include <cmath>
 
-#include "problem.hpp"
+#include "../generic_ga/problem.hpp"
 #include "ttpindividual.hpp"
 #include "item.hpp"
 #include "city.hpp"

@@ -1,9 +1,9 @@
 #include <iostream>
 #include <vector>
 
-#include "ttpga.hpp"
-#include "ttpindividual.hpp"
-#include "ttpinstance.hpp"
+#include "ttp/ttpga.hpp"
+#include "ttp/ttpindividual.hpp"
+#include "ttp/ttpinstance.hpp"
 
 int main(int argc, char *argv[])
 {

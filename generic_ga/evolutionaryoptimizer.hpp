@@ -6,7 +6,7 @@
 #include <algorithm>
 
 #include "problem.hpp"
-#include "geneticutils.hpp"
+#include "../utils/geneticutils.hpp"
 
 template< class T_ind, class T_prob >
 class EvolutionaryOptimizer

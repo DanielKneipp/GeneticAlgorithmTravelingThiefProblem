@@ -4,7 +4,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "geneticutils.hpp"
+#include "../utils/geneticutils.hpp"
 
 namespace SelectionMethod
 {

@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-#include "features.hpp"
+#include "../generic_ga/features.hpp"
 
 class TTPIndividualFeatures : public Features
 {

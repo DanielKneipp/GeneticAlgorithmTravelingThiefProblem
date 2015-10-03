@@ -6,12 +6,12 @@
 #include <exception>
 #include <string>
 
-#include "evolutionaryoptimizer.hpp"
-#include "individual.hpp"
+#include "../generic_ga/evolutionaryoptimizer.hpp"
+#include "../generic_ga/individual.hpp"
 #include "ttpinstance.hpp"
 #include "ttpmutationmethods.hpp"
-#include "selectionmethods.hpp"
-#include "individualrecorder.hpp"
+#include "../generic_ga/selectionmethods.hpp"
+#include "../utils/individualrecorder.hpp"
 
 class TTPGA : public EvolutionaryOptimizer< TTPIndividual, TTPInstance >
 {

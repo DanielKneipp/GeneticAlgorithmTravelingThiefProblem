@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "individual.hpp"
+#include "../generic_ga/individual.hpp"
 #include "ttpindividualfeatures.hpp"
 
 class TTPIndividual : public Individual< TTPIndividualFeatures >
