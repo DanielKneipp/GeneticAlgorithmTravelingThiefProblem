@@ -29,7 +29,7 @@ std::vector< TTPIndividual > TTPMutationMethod::twoOpt_bitFlip( const std::vecto
         {
             float randNum = GeneticUtils::genRealRandNumber< float >( 0.f, 1.f );
             // TODO: The better the fitness, the less likely to turn the bit.
-            if( randNum < 0.5 )
+            if( randNum < 0.001 )
             {
                 mutatedIndividual.features.pickingPlan[ i ] ^= ( unsigned short )( 1 );
             }
@@ -37,6 +37,35 @@ std::vector< TTPIndividual > TTPMutationMethod::twoOpt_bitFlip( const std::vecto
 
         mutatedPopulation.push_back( mutatedIndividual );
     }
+
+    return mutatedPopulation;
+}
+
+std::vector< TTPIndividual > TTPMutationMethod::twoOpt_bitFlip_elitism( const unsigned long numElites,
+                                                                        const std::vector< TTPIndividual >& population )
+{
+    // Get numElite elite solutions to keep.
+    std::vector< TTPIndividual > sortedElites = population;
+    std::partial_sort( sortedElites.begin(),
+                       sortedElites.begin() + numElites,
+                       sortedElites.end(),
+                       []( const TTPIndividual& a, const TTPIndividual& b ) -> bool
+                       {
+                           return a.fitness > b.fitness;
+                       });
+
+    // Use Tow-opt with Bit Flip method to get a mutated population
+    // (with size of the population - number of elites). The elite solutions
+    // aren't included in the mutation procedure.
+    std::vector< TTPIndividual > mutatedPopulation = TTPMutationMethod::twoOpt_bitFlip( std::vector< TTPIndividual >( sortedElites.begin() + numElites,
+                                                                                                                      sortedElites.end() ) );
+
+    sortedElites.erase( sortedElites.begin() + numElites, sortedElites.end() );
+
+    // Insert the elite solutions group to the selected solutions group.
+    mutatedPopulation.insert( mutatedPopulation.end(),
+                              sortedElites.begin(),
+                              sortedElites.end() );
 
     return mutatedPopulation;
 }

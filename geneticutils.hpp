@@ -2,11 +2,18 @@
 #define GENETICUTILS_HPP
 
 #include <random>
+#include <vector>
 #include <limits>
+#include <algorithm>
 #include <cmath>    // std::nextafter
 
 namespace GeneticUtils
 {
+
+/// Seed.
+static std::random_device rd;
+/// Seed being used to feed the random number generator.
+static std::mt19937 mt = std::mt19937( rd() );
 
 /**
  * @brief The PROBLEM_TYPE enum especifies if the problem is of
@@ -31,10 +38,6 @@ enum PROBLEM_TYPE
 template< typename T >
 T genRealRandNumber( const T min, const T max )
 {
-    // Seed.
-    std::random_device rd;
-    // Seed being used to feed the random number generator.
-    std::mt19937 mt( rd() );
     // Note: uniform_real_distribution does [min, max),
     // but we want to do [min, max].
     // Pass the next largest value instead.
@@ -58,14 +61,25 @@ T genRealRandNumber( const T min, const T max )
 template< typename T >
 T genIntRandNumber( const T min, const T max )
 {
-    // Seed.
-    std::random_device rd;
-    // Seed being used to feed the random number generator.
-    std::mt19937 mt( rd() );
     // Generate a uniform integer random distribution on [min, max]
     std::uniform_int_distribution< T >dist( min, max );
 
     return dist( mt );
+}
+
+/**
+ * @brief shuffleVector         Used to shuffle a std::vector.
+ *
+ * @param begin                 The iterator positioned at the start of
+ *                              the subvector that will be shuffled.
+ *
+ * @param end                   The iterator positioned at the end of
+ *                              the subvector that will be shuffled.
+ */
+template< class it_T >
+void shuffleVector( it_T begin, it_T end )
+{
+    std::shuffle( begin, end, mt );
 }
 
 }

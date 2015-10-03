@@ -4,12 +4,14 @@
 #include <vector>
 #include <algorithm>
 #include <exception>
+#include <string>
 
 #include "evolutionaryoptimizer.hpp"
 #include "individual.hpp"
 #include "ttpinstance.hpp"
 #include "ttpmutationmethods.hpp"
 #include "selectionmethods.hpp"
+#include "individualrecorder.hpp"
 
 class TTPGA : public EvolutionaryOptimizer< TTPIndividual, TTPInstance >
 {

@@ -45,14 +45,19 @@ std::vector< T > SelectionMethod::fightClub( const unsigned long tournamentSize,
     std::vector< T > sortedElites = population;
     std::partial_sort( sortedElites.begin(),
                        sortedElites.begin() + numElites,
-                       sortedElites.end() );
+                       sortedElites.end(),
+                       []( const T& a, const T& b ) -> bool
+                       {
+                           return a.fitness > b.fitness;
+                       });
     sortedElites.erase( sortedElites.begin() + numElites, sortedElites.end() );
 
     // Use Tournament method to get a selected population
-    // (with size of the population - number of elites).
+    // (with size of the population - number of elites). The elite
+    // solutions are included in the tournament.
     std::vector< T > selectedPopulation = SelectionMethod::tournament( tournamentSize,
                                                                        newPopulationSize - numElites,
-                                                                       population);
+                                                                       population );
     // Insert the elite solutions group to the selected solutions group.
     selectedPopulation.insert( selectedPopulation.end(),
                                sortedElites.begin(),

@@ -14,29 +14,50 @@ void TTPGA::run( unsigned numIndividuals,
         throw std::logic_error( "Problem is not loaded yet!" );
     }
 
+    const unsigned long TOURNAMET_SIZE = 3;
+    const unsigned long SELECTION_NUM_ELITES = 2;
+    const unsigned long MUTATION_NUM_ELITES = 2;
+
+    std::string stringSpecs = std::to_string( numIndividuals ) +
+                              "_" + std::to_string( TOURNAMET_SIZE ) +
+                              "_" + std::to_string( SELECTION_NUM_ELITES ) +
+                              "_" + std::to_string( MUTATION_NUM_ELITES );
+
+    IndividualRecorder rec;
+    rec.setDestinationFile( IndividualRecorder::getSuffixDateTime() + "__" + stringSpecs + ".dat" );
+
     this->startTimer();
 
     this->population = this->generatePopulation( numIndividuals );
+    this->problem.evaluateIndividuals( this->population );
 
     for( unsigned i = 0; i < numGenerations; i++ )
     {
-        //** Evaluation Step **//
-        this->problem.evaluateIndividuals( this->population );
+
 
         //** Selection Step **//
-        this->population = SelectionMethod::tournament( 3,
-                                                        this->population.size(),
-                                                        this->population );
+        this->population = SelectionMethod::fightClub( TOURNAMET_SIZE,
+                                                       this->population.size(),
+                                                       SELECTION_NUM_ELITES,
+                                                       this->population );
 
         //** Crossing Step **//
 
 
         //** Mutation Step **//
-        this->population = TTPMutationMethod::twoOpt_bitFlip( this->population );
+        this->population = TTPMutationMethod::twoOpt_bitFlip_elitism( MUTATION_NUM_ELITES,
+                                                                      this->population );
+
+        //** Evaluation Step **//
+        this->problem.evaluateIndividuals( this->population );
+
+        std::cout << "Iteration " << i << " completed." << std::endl;
+        rec.recordIndFitnessToFile( this->getBestNIndividuals( 1 )[ 0 ] );
     }
-    this->problem.evaluateIndividuals( this->population );
 
     this->stopTimer();
+
+    rec.plot( "plotGAData.gnu", stringSpecs );
 }
 
 std::vector< TTPIndividual > TTPGA::generatePopulation( unsigned numIndividuals )
@@ -56,7 +77,7 @@ std::vector< TTPIndividual > TTPGA::generatePopulation( unsigned numIndividuals 
         //** Generating TSP component **//
         individual.features.tour.reserve( this->problem.numCities + 1 );
 
-        std::random_shuffle( baseTour.begin() + 1, baseTour.end() - 1 );
+        GeneticUtils::shuffleVector( baseTour.begin() + 1, baseTour.end() - 1 );
         individual.features.tour = baseTour;
 
 
@@ -64,7 +85,8 @@ std::vector< TTPIndividual > TTPGA::generatePopulation( unsigned numIndividuals 
         individual.features.pickingPlan.reserve( this->problem.numItems );
         for( unsigned long j = 0; j < this->problem.numItems; j++ )
         {
-            individual.features.pickingPlan.push_back( GeneticUtils::genIntRandNumber< unsigned short >( 0, 1 ) );
+//            individual.features.pickingPlan.push_back( GeneticUtils::genIntRandNumber< unsigned short >( 0, 1 ) );
+            individual.features.pickingPlan.push_back( 0 );
         }
 
 

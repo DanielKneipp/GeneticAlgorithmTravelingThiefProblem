@@ -7,20 +7,24 @@ void IndividualRecorder::setDestinationFile( const std::string& fileName )
     this->destinationFile = fileName;
 }
 
-template< class T >
-void IndividualRecorder::recordIndFitnessToFile( const T& individual )
+std::string IndividualRecorder::getSuffixDateTime()
 {
-    std::ofstream outputFile( this->destinationFile, std::ios::app  );
-    if( !outputFile )
-    {
-        std::cerr << "Cannot open the outputfile: " << this->destinationFile << std::endl;
-        return;
-    }
+    std::stringstream out;
+    std::chrono::time_point< std::chrono::system_clock > now = std::chrono::system_clock::now();
+    std::time_t now_t = std::chrono::system_clock::to_time_t( now );
+    out << std::put_time( std::localtime( &now_t ), "%Y-%m-%d_%X" );
+    return out.str();
+}
 
-    this->numRecordedInd++;
-    outputFile << std::to_string( this->numRecordedInd )
-               << " " << std::to_string( individual.fitness )
-               << "\n";
+void IndividualRecorder::plot( std::string gnuplotScript, std::string dataTitle )
+{
+    // gnuplot -e "filename='2015-10-02_20:44:26__120_3_2_2.dat'; datatitle='120_3_2_2'" plotGAData.gnu
+    std::string command;
+    command ="gnuplot -e \"";
+    command += std::string( "filename='" ) + this->destinationFile + "'; ";
+    command += std::string( "datatitle='" ) + dataTitle + "' ";
+    command += "\" ";
+    command += gnuplotScript;
 
-    outputFile.close();
+    std::system( command.c_str() );
 }

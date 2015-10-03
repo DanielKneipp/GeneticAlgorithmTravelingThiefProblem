@@ -13,22 +13,22 @@ std::string TTPIndividualFeatures::toString() const
     {
         for( auto&& city : this->tour )
         {
-            outPut += std::to_string( city ) += ", ";
+            outPut += std::to_string( city ) += ",";
         }
         outPut.pop_back();
     }
-    outPut += "],\n";
+    outPut += " ],\n";
 
     outPut += "\"pickingPlan\" : [ ";
     if( this->tour.size() > 0 )
     {
         for( auto&& item : this->pickingPlan )
         {
-            outPut += std::to_string( item ) += ", ";
+            outPut += std::to_string( item ) += ",";
         }
         outPut.pop_back();
     }
-    outPut += "]\n";
+    outPut += " ]\n";
 
     outPut += "}";
 

@@ -2,6 +2,7 @@ TEMPLATE = app
 CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG -= qt
+QMAKE_CXX = g++-5
 
 SOURCES += main.cpp \
     ttpinstance.cpp \
@@ -38,5 +39,6 @@ HEADERS += \
     geneticutils.hpp
 
 DISTFILES += \
-    .gitignore
+    .gitignore \
+    plotGAData.gnu
 

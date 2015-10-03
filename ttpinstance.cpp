@@ -123,28 +123,21 @@ void TTPInstance::evaluateIndividual( TTPIndividual& individual )
     }
 
     // Get the penalty of the first city to the second that the totalWeight is 0.
-    totalPenalty += this->cities[ 0 ].euclDistTo( this->cities[ 1 ] ) / ( this->speedMax );
-    for( unsigned long i = 1; i < this->numCities - 1; i++ )
+    // -1 because index of the city i is i but his position in the vector of cities is i-1 (starts with 0 instead of 1).
+    totalPenalty += this->cities[ individual.features.tour[ 0 ] - 1 ].euclDistTo( this->cities[ individual.features.tour[ 1 ] - 1 ] ) / ( this->speedMax );
+    for( unsigned long i = 1; i < this->numCities; i++ )
     {
         // Calculate the total weight of the picked items in the city i.
         for( unsigned long k = 0; k < this->numItemsPerCity; k++ )
         {
             // -1 because the first line of items references to city 2.
-            const unsigned long itemPos = ( this->numItemsPerCity * ( i - 1 ) ) + k;
+            const unsigned long itemPos = ( this->numItemsPerCity * ( individual.features.tour[ i ] - 1 - 1 ) ) + k;
             totalWeight += this->items[ itemPos ].weight * individual.features.pickingPlan[ itemPos ];
         }
 
-        totalPenalty += this->cities[ i ].euclDistTo( this->cities[ i + 1 ] ) /
+        totalPenalty += this->cities[ individual.features.tour[ i ] - 1 ].euclDistTo( this->cities[ individual.features.tour[ i + 1 ] - 1 ] ) /
                         ( this->speedMax - v * static_cast< double >( totalWeight ) );
     }
-    // Calculate the total weight of the picked items in the last city.
-    for( unsigned long k = 0; k < this->numItemsPerCity; k++ )
-    {
-        const unsigned long itemPos = ( this->numItemsPerCity * ( ( this->numCities - 1 ) - 1 ) ) + k;
-        totalWeight += this->items[ itemPos ].weight * individual.features.pickingPlan[ itemPos ];
-    }
-    totalPenalty += this->cities[ this->numCities - 1 ].euclDistTo( this->cities[ 0 ] ) /
-                    ( this->speedMax - v * static_cast< double >( totalWeight ) );
 
     // Note: The calculations assume that the total weight of picked items wont exceed
     // the knapsack capacity, so if it happen the calculations should be disconsidered
@@ -165,8 +158,8 @@ double TTPInstance::penalizationMethod( unsigned long totalWeight )
 {
     double penalization = 0.0;
 
-    penalization = 10000 + std::pow( std::max( totalWeight - this->knapCapacity,
-                                               ( unsigned long )( 0 ) ), 3 );
+    penalization = - ( 10000 + std::pow( std::max( totalWeight - this->knapCapacity,
+                                                   ( unsigned long )( 0 ) ), 3 ) );
 
     return penalization;
 }

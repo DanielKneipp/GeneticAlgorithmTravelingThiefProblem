@@ -2,6 +2,7 @@
 #define TTPMUTATIONMETHODS_HPP
 
 #include <vector>
+#include <algorithm>
 
 #include "geneticutils.hpp"
 #include "ttpindividual.hpp"
@@ -19,6 +20,21 @@ namespace TTPMutationMethod
  * @return                  The mutated population.
  */
 std::vector< TTPIndividual > twoOpt_bitFlip( const std::vector< TTPIndividual >& population );
+
+/**
+ * @brief twoOpt_bitFlip_elitism    Uses the \ref twoOpt_bitFlip() method to mutate
+ *                                  the population but ensuring that \ref numElites
+ *                                  best individuals will be kept unchanged.
+ *
+ * @param numElites                 Number of elite solutions that will be kept
+ *                                  unchanged.
+ *
+ * @param population                The population that will be mutated.
+ *
+ * @return                          The mutated population.
+ */
+std::vector< TTPIndividual > twoOpt_bitFlip_elitism( const unsigned long numElites,
+                                                     const std::vector< TTPIndividual >& population );
 
 }
 
