@@ -23,14 +23,5 @@ void EvolutionaryOptimizer< T_ind, T_prob >::stopTimer()
 template< class T_ind, class T_prob >
 std::vector< T_ind > EvolutionaryOptimizer< T_ind, T_prob >::getBestNIndividuals( unsigned numIndividuals )
 {
-    std::vector< T_ind > partialSortedPopulation = this->population;
-    std::partial_sort( partialSortedPopulation.begin(),
-                       partialSortedPopulation.begin() + numIndividuals,
-                       partialSortedPopulation.end(),
-                       []( const T_ind& a, const T_ind& b ) -> bool
-                       {
-                           return a.fitness > b.fitness;
-                       });
-    return std::vector< T_ind >( partialSortedPopulation.begin(),
-                                 partialSortedPopulation.begin() + numIndividuals );
+    return GeneticUtils::getBestNIndividuals( this->population, numIndividuals );
 }

@@ -8,14 +8,14 @@ City::City() : index( 0 ),
                pwRatio( 0.0 )
 {}
 
-float City::euclDistTo( const City& dst )
+double City::euclDistTo( const City& dst )
 {
     double diffX = std::pow( static_cast< double >( this->xCord ) -
                              static_cast< double >( dst.xCord ), 2 );
     double diffY = std::pow( static_cast< double >( this->yCord ) -
                              static_cast< double >( dst.yCord ), 2 );
 
-    return static_cast< float >( std::sqrt( diffX + diffY ) );
+    return std::sqrt( diffX + diffY );
 }
 
 void City::calcPwRatio()

@@ -17,9 +17,10 @@ SOURCES += main.cpp \
     ttp/ttpga.cpp \
     generic_ga/selectionmethods.cpp \
     ttp/ttpmutationmethods.cpp \
-    ttp/ttpcrossingmethods.cpp \
     utils/individualrecorder.cpp \
-    utils/geneticutils.cpp
+    generic_ga/mutationmethods.cpp \
+    generic_ga/crossovermethods.cpp \
+    ttp/ttpcrossovermethods.cpp
 
 HEADERS += \
     ttp/item.hpp \
@@ -34,9 +35,11 @@ HEADERS += \
     ttp/ttpga.hpp \
     generic_ga/selectionmethods.hpp \
     ttp/ttpmutationmethods.hpp \
-    ttp/ttpcrossingmethods.hpp \
     utils/individualrecorder.hpp \
-    utils/geneticutils.hpp
+    utils/geneticutils.hpp \
+    generic_ga/mutationmethods.hpp \
+    generic_ga/crossovermethods.hpp \
+    ttp/ttpcrossovermethods.hpp
 
 DISTFILES += \
     .gitignore \

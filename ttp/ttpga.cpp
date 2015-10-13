@@ -36,17 +36,21 @@ void TTPGA::run( unsigned numIndividuals,
 
 
         //** Selection Step **//
-        this->population = SelectionMethod::fightClub( TOURNAMET_SIZE,
-                                                       this->population.size(),
-                                                       SELECTION_NUM_ELITES,
-                                                       this->population );
+        this->population = SelectionMethod::tournament_elitism( this->population,
+                                                                TOURNAMET_SIZE,
+                                                                this->population.size(),
+                                                                SELECTION_NUM_ELITES );
 
-        //** Crossing Step **//
-
+        //** Crossover Step **//
+        std::vector< TTPIndividual > children = TTPCrossoverMethod::orderBased_alternate( this->population,
+                                                                                          1 );
+        this->population.insert( this->population.end(), children.begin(), children.end() );
+        this->problem.evaluateIndividuals( this->population );
+        this->population = GeneticUtils::getBestNIndividuals( this->population, numIndividuals );
 
         //** Mutation Step **//
-        this->population = TTPMutationMethod::twoOpt_bitFlip_elitism( MUTATION_NUM_ELITES,
-                                                                      this->population );
+        this->population = TTPMutationMethod::twoOpt_bitFlip_elitism( this->population,
+                                                                      MUTATION_NUM_ELITES );
 
         //** Evaluation Step **//
         this->problem.evaluateIndividuals( this->population );

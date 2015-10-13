@@ -9,7 +9,9 @@ TTPInstance::TTPInstance( const std::string& fileName ) : numCities( 0 ),
     if( fileName != "" )
         this->readProblem( fileName );
 }
-
+// Reference: Yi Mei, Xiaodong Li and Xin Yao,
+//            Improving Efficiency of Heuristics for the Large Scale Traveling Thief Problem,
+//            http://homepages.ecs.vuw.ac.nz/~yimei/SourceCode/TSMA.zip
 void TTPInstance::readProblem( const std::string& fileName )
 {
     std::ifstream file( fileName );
@@ -56,8 +58,8 @@ void TTPInstance::readProblem( const std::string& fileName )
                 this->cities = std::vector< City >( this->numCities );
                 for( unsigned long i = 0; i < this->numCities; i++ )
                 {
-                    this->cities[ i ].index = i + 1;
-                    file >> tmpString; // index
+                    file >> tmpString;
+                    this->cities[ i ].index = std::stoul( tmpString );
                     file >> tmpString;
                     this->cities[ i ].xCord = std::stoul( tmpString );
                     file >> tmpString;
@@ -71,13 +73,23 @@ void TTPInstance::readProblem( const std::string& fileName )
                 this->items = std::vector< Item >( this->numItems );
                 for( unsigned long i = 0; i < this->numItems; i++ )
                 {
-                    file >> tmpString; // index
+                    file >> tmpString;
+                    this->items[ i ].index = std::stoul( tmpString );
                     file >> tmpString;
                     this->items[ i ].profit = std::stoul( tmpString );
                     file >> tmpString;
                     this->items[ i ].weight = std::stoul( tmpString );
                     file >> tmpString;
                     this->items[ i ].cityIndex = std::stoul( tmpString );
+
+                    try
+                    {
+                        this->items[ i ].calcPwRatio();
+                    }
+                    catch( std::overflow_error& e )
+                    {
+                        std::cerr << e.what() << std::endl;
+                    }
                     this->cities[ this->items[ i ].cityIndex - 1 ].totalProfit += this->items[ i ].profit;
                     this->cities[ this->items[ i ].cityIndex - 1 ].totalWeight += this->items[ i ].weight;
                 }
@@ -116,6 +128,11 @@ void TTPInstance::evaluateIndividual( TTPIndividual& individual )
     unsigned long totalWeight = 0;
     double totalPenalty = 0.0;
 
+    if( !this->isValidIndividual( individual ) )
+    {
+        this->removeWorstItemsWhileInvalid( individual );
+    }
+
     // Get the total profit.
     for( unsigned long i = 0; i < this->numItems; i++ )
     {
@@ -142,14 +159,14 @@ void TTPInstance::evaluateIndividual( TTPIndividual& individual )
     // Note: The calculations assume that the total weight of picked items wont exceed
     // the knapsack capacity, so if it happen the calculations should be disconsidered
     // and a pure penalization be applied instead.
-    if( totalWeight > this->knapCapacity )
-    {
-        fitness = TTPInstance::penalizationMethod( totalWeight );
-    }
-    else
-    {
+//    if( totalWeight > this->knapCapacity )
+//    {
+//        fitness = TTPInstance::penalizationMethod( totalWeight );
+//    }
+//    else
+//    {
         fitness = totalValue - this->rentingRate * totalPenalty;
-    }
+//    }
 
     individual.fitness = fitness;
 }
@@ -158,8 +175,39 @@ double TTPInstance::penalizationMethod( unsigned long totalWeight )
 {
     double penalization = 0.0;
 
-    penalization = - ( 10000 + std::pow( std::max( totalWeight - this->knapCapacity,
+    penalization = - ( 1000000 + std::pow( std::max( totalWeight - this->knapCapacity,
                                                    ( unsigned long )( 0 ) ), 3 ) );
 
     return penalization;
+}
+
+bool TTPInstance::isValidIndividual( TTPIndividual& individual )
+{
+    unsigned long totalIndWeight = 0;
+
+    for( unsigned long i = 0; i < this->numItems; i++ )
+    {
+        totalIndWeight += this->items[ i ].weight * individual.features.pickingPlan[ i ];
+    }
+
+    return totalIndWeight <= this->knapCapacity;
+}
+
+void TTPInstance::removeWorstItemsWhileInvalid( TTPIndividual& individual )
+{
+    std::vector< Item > sortedItemsByPWRatio = this->items;
+
+    std::sort( sortedItemsByPWRatio.begin(),
+               sortedItemsByPWRatio.end(),
+               []( const Item& i1, const Item& i2 )
+               {
+                   return i1.pwRatio < i2.pwRatio;
+               });
+
+    while( !this->isValidIndividual( individual ) )
+    {
+        individual.features.pickingPlan[ sortedItemsByPWRatio[ 0 ].index ] = 0;
+
+        sortedItemsByPWRatio.erase( sortedItemsByPWRatio.begin() );
+    }
 }

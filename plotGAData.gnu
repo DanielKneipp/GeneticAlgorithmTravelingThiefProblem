@@ -16,4 +16,6 @@ set terminal pdf
 set output filename.'.pdf'
 replot
 
+set terminal wxt
+
 pause -1  "Press ENTER to continue"

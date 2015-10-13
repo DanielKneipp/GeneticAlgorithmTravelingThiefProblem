@@ -53,7 +53,7 @@ public:
      */
     EvolutionaryOptimizer();
     /**
-     * @brief ~EvolutionaryOptimizer    Destructor
+     * @brief ~EvolutionaryOptimizer    Destructor.
      */
     virtual ~EvolutionaryOptimizer();
     /**

@@ -8,10 +8,13 @@
 
 #include "../generic_ga/evolutionaryoptimizer.hpp"
 #include "../generic_ga/individual.hpp"
+#include "../generic_ga/selectionmethods.hpp"
+
+#include "../utils/individualrecorder.hpp"
+
 #include "ttpinstance.hpp"
 #include "ttpmutationmethods.hpp"
-#include "../generic_ga/selectionmethods.hpp"
-#include "../utils/individualrecorder.hpp"
+#include "ttpcrossovermethods.hpp"
 
 class TTPGA : public EvolutionaryOptimizer< TTPIndividual, TTPInstance >
 {

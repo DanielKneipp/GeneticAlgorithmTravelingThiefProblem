@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include <stdexcept>
 #include <cmath>
@@ -26,6 +27,14 @@ private:
      * @return                      Value of the penalization.
      */
     double penalizationMethod( unsigned long totalWeight );
+    /**
+     * @brief removeWorstItemsWhileInvalid      Removes the items that has
+     *                                          the worst ratios of profit by weight
+     *                                          until the individual becomes valid (possible).
+     *
+     * @param individual                        The individual that will be changed.
+     */
+    void removeWorstItemsWhileInvalid( TTPIndividual& individual );
 
 
 public:    
@@ -73,6 +82,14 @@ public:
      * @param individual            \ref TTPIndividual that will be evaluated.
      */
     void evaluateIndividual( TTPIndividual& individual );
+    /**
+     * @brief isValidIndividual     Verify if a given individual is valid (possible).
+     *
+     * @param individual            The individual.
+     *
+     * @return                      \c true if the individual is valid, \c false otherwise.
+     */
+    bool isValidIndividual( TTPIndividual& individual );
 };
 
 #endif // TTPINSTANCE_H

@@ -1,9 +1,9 @@
 #include "selectionmethods.hpp"
 
 template< class T >
-std::vector< T > SelectionMethod::tournament( const unsigned long tournamentSize,
-                                              const unsigned long newPopulationSize,
-                                              const std::vector< T >& population )
+std::vector< T > SelectionMethod::tournament( const std::vector< T >& population,
+                                              const unsigned long tournamentSize,
+                                              const unsigned long newPopulationSize )
 {
     std::vector< T >selectedPopulation;
     selectedPopulation.reserve( newPopulationSize );
@@ -36,10 +36,10 @@ std::vector< T > SelectionMethod::tournament( const unsigned long tournamentSize
 }
 
 template< class T >
-std::vector< T > SelectionMethod::fightClub( const unsigned long tournamentSize,
-                                             const unsigned long newPopulationSize,
-                                             const unsigned long numElites,
-                                             const std::vector< T >& population )
+std::vector< T > SelectionMethod::tournament_elitism( const std::vector< T >& population,
+                                                      const unsigned long tournamentSize,
+                                                      const unsigned long newPopulationSize,
+                                                      const unsigned long numElites )
 {
     // Get numElite elite solutions to keep.
     std::vector< T > sortedElites = population;
@@ -55,9 +55,9 @@ std::vector< T > SelectionMethod::fightClub( const unsigned long tournamentSize,
     // Use Tournament method to get a selected population
     // (with size of the population - number of elites). The elite
     // solutions are included in the tournament.
-    std::vector< T > selectedPopulation = SelectionMethod::tournament( tournamentSize,
-                                                                       newPopulationSize - numElites,
-                                                                       population );
+    std::vector< T > selectedPopulation = SelectionMethod::tournament( population,
+                                                                       tournamentSize,
+                                                                       newPopulationSize - numElites );
     // Insert the elite solutions group to the selected solutions group.
     selectedPopulation.insert( selectedPopulation.end(),
                                sortedElites.begin(),

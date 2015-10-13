@@ -25,7 +25,6 @@ public:
      * @brief City  Constructor that initializes all variables with the \c 0 value.
      */
     City();
-
     /**
      * @brief euclDistTo    Calculate the Euclidean distance from this
      *                      city to the city passed as a parameter.
@@ -34,8 +33,7 @@ public:
      *
      * @return              Distance from this city to \ref dst city.
      */
-    float euclDistTo( const City& dst );
-
+    double euclDistTo( const City& dst );
     /**
      * @brief calcPwRatio   Calculate the ratio between the \ref totalProfit and
      *                      \ref totalWeight. If \ref totalWeight is equal to 0,

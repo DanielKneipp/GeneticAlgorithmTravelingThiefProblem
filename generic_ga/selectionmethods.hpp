@@ -24,11 +24,12 @@ namespace SelectionMethod
  * @return                      The selected population.
  */
 template< class T >
-std::vector< T > tournament( const unsigned long tournamentSize,
-                             const unsigned long newPopulationSize,
-                             const std::vector< T >& population );
+std::vector< T > tournament( const std::vector< T >& population,
+                             const unsigned long tournamentSize,
+                             const unsigned long newPopulationSize );
+
 /**
- * @brief fightClub             Uses the \ref tournament method to select
+ * @brief tournament_elitism    Uses the \ref tournament method to select
  *                              (\ref newPopulationSize - \ref numElites) solutions but
  *                              ensure that \ref numElites best solutions will be kept to
  *                              selected population group.
@@ -44,10 +45,10 @@ std::vector< T > tournament( const unsigned long tournamentSize,
  * @return                      The selected population.
  */
 template< class T >
-std::vector< T > fightClub( const unsigned long tournamentSize,
-                            const unsigned long newPopulationSize,
-                            const unsigned long numElites,
-                            const std::vector< T >& population );
+std::vector< T > tournament_elitism( const std::vector< T >& population,
+                                     const unsigned long tournamentSize,
+                                     const unsigned long newPopulationSize,
+                                     const unsigned long numElites );
 
 }
 

@@ -1,7 +1,9 @@
 #include "ttpmutationmethods.hpp"
 
+namespace TTPMutationMethod
+{
 
-std::vector< TTPIndividual > TTPMutationMethod::twoOpt_bitFlip( const std::vector< TTPIndividual >& population )
+std::vector< TTPIndividual > twoOpt_bitFlip( const std::vector< TTPIndividual >& population )
 {
     std::vector< TTPIndividual > mutatedPopulation;
     mutatedPopulation.reserve( population.size() );
@@ -17,23 +19,16 @@ std::vector< TTPIndividual > TTPMutationMethod::twoOpt_bitFlip( const std::vecto
                                                                                     individual.features.tour.size() - 3 );
         unsigned long endPoint = GeneticUtils::genIntRandNumber< unsigned long >( beginPoint + 1,
                                                                                   individual.features.tour.size() - 2 );
-        // Swap.
-        for( unsigned long i = beginPoint; i <= endPoint; i++ )
-        {
-            mutatedIndividual.features.tour[ i ] = individual.features.tour[ endPoint - ( i - beginPoint ) ];
-        }
-
+        // Reverse.
+        mutatedIndividual.features.tour = MutationMethods::twoOpt< unsigned long, unsigned long >
+                                                                 ( individual.features.tour,
+                                                                   beginPoint,
+                                                                   endPoint );
 
         //** Bit flip **//
-        for( unsigned long i = 0; i < mutatedIndividual.features.pickingPlan.size(); i++ )
-        {
-            float randNum = GeneticUtils::genRealRandNumber< float >( 0.f, 1.f );
-            // TODO: The better the fitness, the less likely to turn the bit.
-            if( randNum < 0.001 )
-            {
-                mutatedIndividual.features.pickingPlan[ i ] ^= ( unsigned short )( 1 );
-            }
-        }
+        mutatedIndividual.features.pickingPlan = MutationMethods::bitFlip< unsigned short >
+                                                                         ( individual.features.pickingPlan,
+                                                                           0.001 );
 
         mutatedPopulation.push_back( mutatedIndividual );
     }
@@ -41,8 +36,8 @@ std::vector< TTPIndividual > TTPMutationMethod::twoOpt_bitFlip( const std::vecto
     return mutatedPopulation;
 }
 
-std::vector< TTPIndividual > TTPMutationMethod::twoOpt_bitFlip_elitism( const unsigned long numElites,
-                                                                        const std::vector< TTPIndividual >& population )
+std::vector< TTPIndividual > twoOpt_bitFlip_elitism( const std::vector< TTPIndividual >& population,
+                                                     const unsigned long numElites )
 {
     // Get numElite elite solutions to keep.
     std::vector< TTPIndividual > sortedElites = population;
@@ -57,8 +52,8 @@ std::vector< TTPIndividual > TTPMutationMethod::twoOpt_bitFlip_elitism( const un
     // Use Tow-opt with Bit Flip method to get a mutated population
     // (with size of the population - number of elites). The elite solutions
     // aren't included in the mutation procedure.
-    std::vector< TTPIndividual > mutatedPopulation = TTPMutationMethod::twoOpt_bitFlip( std::vector< TTPIndividual >( sortedElites.begin() + numElites,
-                                                                                                                      sortedElites.end() ) );
+    std::vector< TTPIndividual > mutatedPopulation = twoOpt_bitFlip( std::vector< TTPIndividual >( sortedElites.begin() + numElites,
+                                                                                                   sortedElites.end() ) );
 
     sortedElites.erase( sortedElites.begin() + numElites, sortedElites.end() );
 
@@ -69,3 +64,6 @@ std::vector< TTPIndividual > TTPMutationMethod::twoOpt_bitFlip_elitism( const un
 
     return mutatedPopulation;
 }
+
+}
+

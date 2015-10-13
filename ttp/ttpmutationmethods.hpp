@@ -5,6 +5,9 @@
 #include <algorithm>
 
 #include "../utils/geneticutils.hpp"
+
+#include "../generic_ga/mutationmethods.hpp"
+
 #include "ttpindividual.hpp"
 
 namespace TTPMutationMethod
@@ -33,8 +36,8 @@ std::vector< TTPIndividual > twoOpt_bitFlip( const std::vector< TTPIndividual >&
  *
  * @return                          The mutated population.
  */
-std::vector< TTPIndividual > twoOpt_bitFlip_elitism( const unsigned long numElites,
-                                                     const std::vector< TTPIndividual >& population );
+std::vector< TTPIndividual > twoOpt_bitFlip_elitism( const std::vector< TTPIndividual >& population,
+                                                     const unsigned long numElites );
 
 }
 
