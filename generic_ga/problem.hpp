@@ -42,6 +42,21 @@ public:
     virtual void evaluateIndividuals( std::vector< T >& population );
 };
 
-#include "problem.cpp"
+
+template< class T >
+Problem< T >::Problem() : isLoaded( false ) {}
+
+template< class T >
+Problem< T >::~Problem() {}
+
+template< class T >
+void Problem< T >::evaluateIndividuals( std::vector< T >& population )
+{
+    for( T& individual : population )
+    {
+        this->evaluateIndividual( individual );
+    }
+}
+
 
 #endif // PROBLEM_HPP

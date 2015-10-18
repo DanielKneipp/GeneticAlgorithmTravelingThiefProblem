@@ -7,9 +7,10 @@
 #include <algorithm>
 #include <vector>
 #include <stdexcept>
-#include <cmath>
+#include <cmath>        // std::pow()
 
 #include "../generic_ga/problem.hpp"
+
 #include "ttpindividual.hpp"
 #include "item.hpp"
 #include "city.hpp"
@@ -54,8 +55,10 @@ public:
     double rentingRate;
     /** Array of cities. */
     std::vector< City > cities;
-    /** Array of items */
+    /** Array of items. */
     std::vector< Item > items;
+    /** Problem file name. */
+    std::string probFileName;
 
     /**
      * @brief TTPInstance   Constructor.

@@ -4,11 +4,13 @@ TTPInstance::TTPInstance( const std::string& fileName ) : numCities( 0 ),
                                                           numItems( 0 ),
                                                           knapCapacity( 0 ),
                                                           speedMax( 0.0 ),
-                                                          speedMin( 0.0 )
+                                                          speedMin( 0.0 ),
+                                                          probFileName( "" )
 {
     if( fileName != "" )
         this->readProblem( fileName );
 }
+
 // Reference: Yi Mei, Xiaodong Li and Xin Yao,
 //            Improving Efficiency of Heuristics for the Large Scale Traveling Thief Problem,
 //            http://homepages.ecs.vuw.ac.nz/~yimei/SourceCode/TSMA.zip
@@ -17,6 +19,10 @@ void TTPInstance::readProblem( const std::string& fileName )
     std::ifstream file( fileName );
     if( file.is_open() )
     {
+        std::size_t probFileNameStartPos = fileName.find_last_of( "/\\" );
+        this->probFileName = fileName.substr( probFileNameStartPos + 1 );
+        std::replace( this->probFileName.begin(), this->probFileName.end(), '_', '-');
+
         std::string tmpString;
         while( true )
         {

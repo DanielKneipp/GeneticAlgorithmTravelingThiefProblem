@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <stdexcept>
+#include <string>
 
 class City
 {

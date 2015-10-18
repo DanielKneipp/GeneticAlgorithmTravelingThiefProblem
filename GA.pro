@@ -8,18 +8,18 @@ SOURCES += main.cpp \
     ttp/ttpinstance.cpp \
     ttp/item.cpp \
     ttp/city.cpp \
-    generic_ga/individual.cpp \
+#    generic_ga/individual.cpp \
     ttp/ttpindividual.cpp \
     generic_ga/features.cpp \
     ttp/ttpindividualfeatures.cpp \
-    generic_ga/problem.cpp \
-    generic_ga/evolutionaryoptimizer.cpp \
+#    generic_ga/problem.cpp \
+#    generic_ga/evolutionaryoptimizer.cpp \
     ttp/ttpga.cpp \
-    generic_ga/selectionmethods.cpp \
+#    generic_ga/selectionmethods.cpp \
     ttp/ttpmutationmethods.cpp \
     utils/individualrecorder.cpp \
-    generic_ga/mutationmethods.cpp \
-    generic_ga/crossovermethods.cpp \
+#    generic_ga/mutationmethods.cpp \
+#    generic_ga/crossovermethods.cpp \
     ttp/ttpcrossovermethods.cpp
 
 HEADERS += \
@@ -43,6 +43,5 @@ HEADERS += \
 
 DISTFILES += \
     .gitignore \
-    plotGAData.gnu \
+    plotGAData.gp \
     README.md
-

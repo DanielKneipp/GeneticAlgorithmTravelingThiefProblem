@@ -15,12 +15,12 @@ std::vector< TTPIndividual > twoOpt_bitFlip( const std::vector< TTPIndividual >&
         //** 2-opt **//
         // Generating start and end cut points.
         // Don't get the last and first city because they should be the first city (1).
-        unsigned long beginPoint = GeneticUtils::genIntRandNumber< unsigned long >( 1,
+        std::size_t beginPoint = GeneticUtils::genIntRandNumber< std::size_t >( 1,
                                                                                     individual.features.tour.size() - 3 );
-        unsigned long endPoint = GeneticUtils::genIntRandNumber< unsigned long >( beginPoint + 1,
+        std::size_t endPoint = GeneticUtils::genIntRandNumber< std::size_t >( beginPoint + 1,
                                                                                   individual.features.tour.size() - 2 );
         // Reverse.
-        mutatedIndividual.features.tour = MutationMethods::twoOpt< unsigned long, unsigned long >
+        mutatedIndividual.features.tour = MutationMethods::twoOpt< unsigned long, std::size_t >
                                                                  ( individual.features.tour,
                                                                    beginPoint,
                                                                    endPoint );
@@ -28,7 +28,7 @@ std::vector< TTPIndividual > twoOpt_bitFlip( const std::vector< TTPIndividual >&
         //** Bit flip **//
         mutatedIndividual.features.pickingPlan = MutationMethods::bitFlip< unsigned short >
                                                                          ( individual.features.pickingPlan,
-                                                                           0.001 );
+                                                                           0.001f );
 
         mutatedPopulation.push_back( mutatedIndividual );
     }

@@ -1,6 +1,6 @@
 #include "ttpga.hpp"
 
-TTPGA::TTPGA() {}
+TTPGA::TTPGA() : outputDirectory( "" ) {}
 
 void TTPGA::run( unsigned numIndividuals,
                  unsigned numGenerations )
@@ -18,13 +18,19 @@ void TTPGA::run( unsigned numIndividuals,
     const unsigned long SELECTION_NUM_ELITES = 2;
     const unsigned long MUTATION_NUM_ELITES = 2;
 
+
     std::string stringSpecs = std::to_string( numIndividuals ) +
-                              "_" + std::to_string( TOURNAMET_SIZE ) +
-                              "_" + std::to_string( SELECTION_NUM_ELITES ) +
-                              "_" + std::to_string( MUTATION_NUM_ELITES );
+                              "-"  + std::to_string( TOURNAMET_SIZE ) +
+                              "-"  + std::to_string( SELECTION_NUM_ELITES ) +
+                              "-"  + std::to_string( MUTATION_NUM_ELITES );
 
     IndividualRecorder rec;
-    rec.setDestinationFile( IndividualRecorder::getSuffixDateTime() + "__" + stringSpecs + ".dat" );
+    rec.setDestinationFile( this->outputDirectory + 
+                            this->problem.probFileName +
+                            "__" + IndividualRecorder::getSuffixDateTime() + 
+                            "__" + stringSpecs + ".dat" );
+
+    stringSpecs += std::string( "  " ) + this->problem.probFileName;
 
     this->startTimer();
 
@@ -33,8 +39,6 @@ void TTPGA::run( unsigned numIndividuals,
 
     for( unsigned i = 0; i < numGenerations; i++ )
     {
-
-
         //** Selection Step **//
         this->population = SelectionMethod::tournament_elitism( this->population,
                                                                 TOURNAMET_SIZE,
@@ -61,7 +65,7 @@ void TTPGA::run( unsigned numIndividuals,
 
     this->stopTimer();
 
-    rec.plot( "plotGAData.gnu", stringSpecs );
+    rec.plot( "plotGAData.gp", stringSpecs );
 }
 
 std::vector< TTPIndividual > TTPGA::generatePopulation( unsigned numIndividuals )

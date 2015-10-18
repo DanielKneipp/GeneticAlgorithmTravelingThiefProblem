@@ -70,5 +70,11 @@ Thumbs.db
 *.dll
 *.exe
 
-# qtcreator files
-*.pro
+# Other
+out_log/
+instances/
+x64/
+debug/
+release/
+performance_analysis/
+*.cd

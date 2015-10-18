@@ -11,16 +11,16 @@ std::vector< TTPIndividual > orderBased_alternate( const std::vector< TTPIndivid
 
     GeneticUtils::shuffleVector( shuffledPopulation.begin(), shuffledPopulation.end() );
 
-    const unsigned long numItems = population[ 0 ].features.pickingPlan.size();
+    const std::size_t numItems = population[ 0 ].features.pickingPlan.size();
 
     for( std::size_t i = 0; i < population.size(); i = i + 2 )
     {
         //** Alternate with n cut points - KP-component **//
-        std::vector< unsigned long > cutPoints = GeneticUtils::getNPositions< unsigned long >
-                                                                            ( 0, numItems - 1, numCutPoints );
+        std::vector< std::size_t > cutPoints = GeneticUtils::getNPositions< std::size_t >
+                                                                          ( 0, numItems - 1, numCutPoints );
 
         std::array< std::vector< unsigned short >, 2 > childrenKPComponent = CrossoverMethod::alternateNCutPoints< unsigned short,
-                                                                                                                   unsigned long >
+                                                                                                                   std::size_t >
                                                                                                                  ( shuffledPopulation[ i ].features.pickingPlan,
                                                                                                                    shuffledPopulation[ i + 1 ].features.pickingPlan,
                                                                                                                    cutPoints );

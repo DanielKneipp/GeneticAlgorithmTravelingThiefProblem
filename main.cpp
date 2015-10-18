@@ -14,7 +14,7 @@ enum ErrorTypes
 
 void printHelp()
 {
-    std::cout << "Usage: GA <TTP instance file> <number of individuals> <number of generations>" << std::endl;
+    std::cout << "Usage: GA <TTP instance file> <number of individuals> <number of generations> [output directory]" << std::endl;
 }
 
 int main( int argc, char *argv[] )
@@ -35,6 +35,10 @@ int main( int argc, char *argv[] )
         numGenerations = static_cast< unsigned >( std::stoul( argv[ 3 ] ) );
 
         TTPInstance problem( argv[ 1 ] );
+        if( argc = 5 )
+        {
+            ga.outputDirectory = argv[ 4 ];
+        }
         ga.problem = problem;
         ga.run( numIndividuals, numGenerations );
 

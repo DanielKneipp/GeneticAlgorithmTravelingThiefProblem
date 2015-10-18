@@ -7,6 +7,9 @@
 #include <limits>
 #include <algorithm>
 #include <cmath>    // std::nextafter
+#ifdef _MSC_VER
+    #include <numeric> // std::iota
+#endif // _MSC_VER
 
 namespace GeneticUtils
 {

@@ -13,7 +13,7 @@ public:
     /**
      * @brief ~Features  Destructor.
      */
-    ~Features();
+    virtual ~Features();
     /**
      * @brief toString  Used to get a \c string representation of the features.
      *

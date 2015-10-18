@@ -5,6 +5,9 @@
 #include <algorithm>
 #include <exception>
 #include <string>
+#ifdef _MSC_VER
+    #include <numeric> // std::iota
+#endif // _MSC_VER
 
 #include "../generic_ga/evolutionaryoptimizer.hpp"
 #include "../generic_ga/individual.hpp"
@@ -31,6 +34,9 @@ protected:
 
 
 public:
+    /** Specify the output direcotory of the execution data. */
+    std::string outputDirectory;
+
     /**
      * @brief TTPGA     Constructor.
      */

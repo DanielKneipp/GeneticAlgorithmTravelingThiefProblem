@@ -2,6 +2,7 @@
 #define ITEM_H
 
 #include <stdexcept>
+#include <string>
 
 class Item
 {
