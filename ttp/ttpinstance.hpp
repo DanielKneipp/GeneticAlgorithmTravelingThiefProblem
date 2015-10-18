@@ -18,6 +18,9 @@
 class TTPInstance : public Problem< TTPIndividual >
 {
 private:
+    /** Matrix with the values of distance between the cities. */
+    std::vector< std::vector< double > > distMatrix;
+
     /**
      * @brief penalizationMethod     Method that penalizies the individual
      *                              if he passes tha knapsack capacity.
@@ -36,6 +39,11 @@ private:
      * @param individual                        The individual that will be changed.
      */
     void removeWorstItemsWhileInvalid( TTPIndividual& individual );
+    /**
+     * @brief fillDistanceMatrix    Fill the \ref distMatrix with the distance value of
+     *                              the cities.
+     */
+    bool fillDistanceMatrix();
 
 
 public:    
