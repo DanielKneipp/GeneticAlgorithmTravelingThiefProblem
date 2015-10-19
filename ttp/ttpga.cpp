@@ -18,19 +18,30 @@ void TTPGA::run( unsigned numIndividuals,
     const unsigned long SELECTION_NUM_ELITES = 2;
     const unsigned long MUTATION_NUM_ELITES = 2;
 
-
+#if defined(__GA_PLOT_) || defined(__GA_LOG_)
     std::string stringSpecs = std::to_string( numIndividuals ) +
-                              "-"  + std::to_string( TOURNAMET_SIZE ) +
-                              "-"  + std::to_string( SELECTION_NUM_ELITES ) +
-                              "-"  + std::to_string( MUTATION_NUM_ELITES );
+                              "-" + std::to_string( TOURNAMET_SIZE ) +
+                              "-" + std::to_string( SELECTION_NUM_ELITES ) +
+                              "-" + std::to_string( MUTATION_NUM_ELITES );
 
     IndividualRecorder rec;
-    rec.setDestinationFile( this->outputDirectory + 
-                            this->problem.probFileName +
-                            "__" + IndividualRecorder::getSuffixDateTime() + 
-                            "__" + stringSpecs + ".dat" );
-
+#endif // __GA_PLOT_ || __GA_LOG_
+#ifdef __GA_PLOT_
+    rec.setDestinationFileFit( this->outputDirectory + 
+                               this->problem.probFileName +
+                               "__" + IndividualRecorder::getSuffixDateTime() + 
+                               "__" + stringSpecs + ".dat" );
+#endif //__GA_PLOT_
+#ifdef __GA_LOG_
+    rec.setDestinationFileLog( this->outputDirectory + 
+                               this->problem.probFileName +
+                               "__" + IndividualRecorder::getSuffixDateTime() + 
+                               "__" + stringSpecs + ".log" );
+    rec.prepareFileLog();
+#endif // __GA_LOG_
+#ifdef __GA_PLOT_
     stringSpecs += std::string( "  " ) + this->problem.probFileName;
+#endif // __GA_PLOT_
 
     this->startTimer();
 
@@ -60,12 +71,20 @@ void TTPGA::run( unsigned numIndividuals,
         this->problem.evaluateIndividuals( this->population );
 
         std::cout << "Iteration " << i << " completed." << std::endl;
-        rec.recordIndFitnessToFile( this->getBestNIndividuals( 1 )[ 0 ] );
+#ifdef __GA_PLOT_
+        rec.recordIndFitnessToFileFit( this->getBestNIndividuals( 1 )[ 0 ] );
+#endif //__GA_PLOT_
+#ifdef __GA_LOG_
+        rec.recordIndFitnessToFileLog( this->getBestNIndividuals( 1 )[ 0 ] );
+#endif // __GA_LOG_
     }
-
     this->stopTimer();
-
+#ifdef __GA_LOG_
+    rec.closeFileLog();
+#endif // __GA_LOG_
+#ifdef __GA_PLOT_
     rec.plot( "plotGAData.gp", stringSpecs );
+#endif //__GA_PLOT_
 }
 
 std::vector< TTPIndividual > TTPGA::generatePopulation( unsigned numIndividuals )
@@ -93,7 +112,6 @@ std::vector< TTPIndividual > TTPGA::generatePopulation( unsigned numIndividuals 
         individual.features.pickingPlan.reserve( this->problem.numItems );
         for( unsigned long j = 0; j < this->problem.numItems; j++ )
         {
-//            individual.features.pickingPlan.push_back( GeneticUtils::genIntRandNumber< unsigned short >( 0, 1 ) );
             individual.features.pickingPlan.push_back( 0 );
         }
 

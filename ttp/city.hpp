@@ -1,7 +1,7 @@
 #ifndef CITY_H
 #define CITY_H
 
-#include <cmath>
+#include <cmath>        // std::pow(), std::sqrt()
 #include <stdexcept>
 #include <string>
 
@@ -16,7 +16,7 @@ public:
     unsigned long yCord;
     /** Sum of profit (value) of all items that belongs to this city. */
     unsigned long long totalProfit;
-    /** Sum of weight of all itens that belongs to this city. */
+    /** Sum of weight of all items that belongs to this city. */
     unsigned long long totalWeight;
     /** Ratio between the total profit ({ @link totalProfit }) of the city
      * and his total weight ({ @link totalWeight }). */
@@ -38,7 +38,7 @@ public:
     /**
      * @brief calcPwRatio   Calculate the ratio between the \ref totalProfit and
      *                      \ref totalWeight. If \ref totalWeight is equal to 0,
-     *                      than a std::overflow_error exception will be throwed.
+     *                      than a std::overflow_error exception will be thrown.
      */
     void  calcPwRatio();
 };

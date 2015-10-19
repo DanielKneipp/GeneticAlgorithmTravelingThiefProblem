@@ -22,8 +22,8 @@ private:
     std::vector< std::vector< double > > distMatrix;
 
     /**
-     * @brief penalizationMethod     Method that penalizies the individual
-     *                              if he passes tha knapsack capacity.
+     * @brief penalizationMethod     Method that penalizes the individual
+     *                              if he passes the knapsack capacity.
      *
      * @param totalWeight           The total weight of the items picked
      *                              by the individual.
@@ -87,7 +87,7 @@ public:
     void readProblem( const std::string& fileName );
     /**
      * @brief evaluateIndividual    Evaluate the individual and set
-     *                              his fitness. Cost funtion used is in:
+     *                              his fitness. Cost function used is in:
      *                              A Comprehensive Benchmark Set and Heuristics.
      *
      * @param individual            \ref TTPIndividual that will be evaluated.

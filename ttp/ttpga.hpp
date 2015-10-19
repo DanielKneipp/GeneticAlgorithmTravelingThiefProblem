@@ -1,19 +1,23 @@
 #ifndef TTPGA_HPP
 #define TTPGA_HPP
 
+#define __GA_PLOT_
+#define __GA_LOG_
+
 #include <vector>
 #include <algorithm>
 #include <exception>
 #include <string>
 #ifdef _MSC_VER
-    #include <numeric> // std::iota
+#include <numeric>  // std::iota
 #endif // _MSC_VER
 
 #include "../generic_ga/evolutionaryoptimizer.hpp"
 #include "../generic_ga/individual.hpp"
 #include "../generic_ga/selectionmethods.hpp"
-
+#if defined(__GA_PLOT_) || defined(__GA_LOG_)
 #include "../utils/individualrecorder.hpp"
+#endif // __GA_PLOT_ || __GA_LOG_
 
 #include "ttpinstance.hpp"
 #include "ttpmutationmethods.hpp"
@@ -34,7 +38,7 @@ protected:
 
 
 public:
-    /** Specify the output direcotory of the execution data. */
+    /** Specify the output directory of the execution data. */
     std::string outputDirectory;
 
     /**

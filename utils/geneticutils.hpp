@@ -6,9 +6,9 @@
 #include <array>
 #include <limits>
 #include <algorithm>
-#include <cmath>    // std::nextafter
+#include <cmath>        // std::nextafter()
 #ifdef _MSC_VER
-    #include <numeric> // std::iota
+    #include <numeric>  // std::iota()
 #endif // _MSC_VER
 
 namespace GeneticUtils
@@ -20,7 +20,7 @@ static std::random_device rd;
 static std::mt19937 mt = std::mt19937( rd() );
 
 /**
- * @brief The PROBLEM_TYPE enum especifies if the problem is of
+ * @brief The PROBLEM_TYPE enum specifies if the problem is of
  *        minimization or maximization.
  */
 enum PROBLEM_TYPE
@@ -75,10 +75,10 @@ T genIntRandNumber( const T min, const T max )
  * @brief shuffleVector         Used to shuffle a std::vector.
  *
  * @param begin                 The iterator positioned at the start of
- *                              the subvector that will be shuffled.
+ *                              the sub-vector that will be shuffled.
  *
  * @param end                   The iterator positioned at the end of
- *                              the subvector that will be shuffled.
+ *                              the sub-vector that will be shuffled.
  */
 template< class T_it >
 void shuffleVector( T_it begin, T_it end )
@@ -125,7 +125,7 @@ std::vector< T_ind > getBestNIndividuals( const std::vector< T_ind >& population
  *
  * @param numIndividuals            Number of individuals that will be returned.
  *
- * @param comp                      Function that will be used to comapre two individuals.
+ * @param comp                      Function that will be used to compare two individuals.
  *
  * @return                          The best individuals in the population.
  */
@@ -179,7 +179,7 @@ std::vector< T_ind > sortIndividuals( const std::vector< T_ind >& population )
  *
  * @param numIndividuals            Number of individuals that will be returned.
  *
- * @param comp                      Function that will be used to comapre two individuals.
+ * @param comp                      Function that will be used to compare two individuals.
  *
  * @return                          The ordered population.
  */
@@ -226,7 +226,7 @@ std::vector< T > getNPositions( const T startPoint,
 }
 
 /**
- * @brief The valueWithIdx struct can be used to store some value
+ * @brief The valueWithIdx structure can be used to store some value
  *        together with some index value.
  */
 template< typename T >
