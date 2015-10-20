@@ -182,7 +182,7 @@ void TTPInstance::evaluateIndividual( TTPIndividual& individual )
     }
 
     // Note: The calculations assume that the total weight of picked items wont exceed
-    // the knapsack capacity, so if it happen the calculations should be disconsidered.
+    // the knapsack capacity, so if it happen the calculations should be ignored.
 
     fitness = totalValue - this->rentingRate * totalPenalty;
 
@@ -217,7 +217,7 @@ void TTPInstance::removeWorstItemsWhileInvalid( TTPIndividual& individual )
 
     std::sort( sortedItemsByPWRatio.begin(),
                sortedItemsByPWRatio.end(),
-               []( const Item& i1, const Item& i2 )
+               []( const Item& i1, const Item& i2 ) -> bool
                {
                    return i1.pwRatio < i2.pwRatio;
                });

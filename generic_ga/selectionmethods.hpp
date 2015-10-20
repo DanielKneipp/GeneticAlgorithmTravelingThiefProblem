@@ -61,31 +61,27 @@ std::vector< T > SelectionMethod::tournament( const std::vector< T >& population
     std::vector< T > selectedPopulation;
     selectedPopulation.reserve( newPopulationSize );
 
-    std::size_t* ring = new std::size_t[ tournamentSize ]; // TODO: change to a static array with size = 2.
-
-    std::size_t best = 0;
+    // Note: Position 0 is always the best position of the tournament.
+    std::size_t ring[ 2 ];
     std::size_t randPos = 0;
 
     for( std::size_t i = 0; i < newPopulationSize; i++ )
     {
         randPos = GeneticUtils::genIntRandNumber< std::size_t >( 0, population.size() - 1 );
         ring[ 0 ] = randPos;
-        best = 0;
 
         for( std::size_t j = 1; j < tournamentSize; j++ )
         {
             randPos = GeneticUtils::genIntRandNumber< std::size_t >( 0, population.size() - 1 );
-            ring[ j ] = randPos;
+            ring[ 1 ] = randPos;
 
-            if( population[ ring[ j ] ] > population[ ring[ best ] ] )
+            if( population[ ring[ 1 ] ] > population[ ring[ 0 ] ] )
             {
-                best = j;
+                ring[ 0 ] = ring[ 1 ];
             }
         }
-        selectedPopulation.push_back( population[ best ] );
+        selectedPopulation.push_back( population[ ring[ 0 ] ] );
     }
-
-    delete[] ring;
 
     return selectedPopulation;
 }
