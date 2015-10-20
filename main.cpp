@@ -35,7 +35,7 @@ int main( int argc, char *argv[] )
         numGenerations = static_cast< unsigned >( std::stoul( argv[ 3 ] ) );
 
         TTPInstance problem( argv[ 1 ] );
-        if( argc = 5 )
+        if( argc == 5 )
         {
             ga.outputDirectory = argv[ 4 ];
         }

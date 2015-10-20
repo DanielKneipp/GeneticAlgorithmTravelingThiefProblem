@@ -224,7 +224,7 @@ void TTPInstance::removeWorstItemsWhileInvalid( TTPIndividual& individual )
 
     while( !this->isValidIndividual( individual ) )
     {
-        individual.features.pickingPlan[ sortedItemsByPWRatio[ 0 ].index ] = 0;
+        individual.features.pickingPlan[ sortedItemsByPWRatio[ 0 ].index - 1 ] = 0;
 
         sortedItemsByPWRatio.erase( sortedItemsByPWRatio.begin() );
     }

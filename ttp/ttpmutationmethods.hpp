@@ -37,7 +37,7 @@ std::vector< TTPIndividual > twoOpt_bitFlip( const std::vector< TTPIndividual >&
  * @return                          The mutated population.
  */
 std::vector< TTPIndividual > twoOpt_bitFlip_elitism( const std::vector< TTPIndividual >& population,
-                                                     const unsigned long numElites );
+                                                     const std::size_t numElites );
 
 }
 

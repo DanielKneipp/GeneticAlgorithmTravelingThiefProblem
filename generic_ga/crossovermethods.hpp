@@ -66,11 +66,13 @@ std::array< std::vector< T_f >, 2 > CrossoverMethod::alternateNCutPoints( const 
 
             if( j % 2 == 0 )
             {
+                // Parent1 -> Offspring1 and Parent2 -> Offspring2
                 children[ 0 ].push_back( featuresParent1[ i ] );
                 children[ 1 ].push_back( featuresParent2[ i ] );
             }
             else
             {
+                // Parent1 -> Offspring2 and Parent2 -> Offspring1
                 children[ 1 ].push_back( featuresParent1[ i ] );
                 children[ 0 ].push_back( featuresParent2[ i ] );
             }
@@ -87,11 +89,13 @@ std::array< std::vector< T_f >, 2 > CrossoverMethod::alternateNCutPoints( const 
 
             if( j % 2 != 0 )
             {
+                // Parent1 -> Offspring1 and Parent2 -> Offspring2
                 children[ 0 ].push_back( featuresParent1[ i ] );
                 children[ 1 ].push_back( featuresParent2[ i ] );
             }
             else
             {
+                // Parent1 -> Offspring2 and Parent2 -> Offspring1
                 children[ 1 ].push_back( featuresParent1[ i ] );
                 children[ 0 ].push_back( featuresParent2[ i ] );
             }

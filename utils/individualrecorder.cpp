@@ -1,7 +1,8 @@
 #include "individualrecorder.hpp"
 
-IndividualRecorder::IndividualRecorder() : numRecordedIndFit( 0 ),
-                                           numRecordedIndLog( 0 )
+IndividualRecorder::IndividualRecorder() : numRecordedIndLog( 0 ),
+                                           numRecordedIndFit( 0 )
+                                           
 {}
 
 void IndividualRecorder::setDestinationFileFit( const std::string& fileName )
@@ -37,7 +38,7 @@ void IndividualRecorder::closeFileLog()
         return;
     }
 
-    outputFile << "\n}";
+    outputFile << "}\n\n\n}";
 
     outputFile.close();
 }

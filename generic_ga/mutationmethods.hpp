@@ -24,14 +24,14 @@ std::vector< T > bitFlip( const std::vector< T >& features, float probability );
 /**
  * @brief twoOpt            Generate a new array of features with the values
  *                          inside the range specified bi \ref beginPoint and
- *                          \ref endPoint writed in reverse order.
+ *                          \ref endPoint written in reverse order.
  *
  * @param features          Array of features.
  *
- * @param beginPoint        Begin of the sub-array that will be writed in reverse
+ * @param beginPoint        Begin of the sub-array that will be written in reverse
  *                          order.
  *
- * @param endPoint          End of the sub-array that will be writed in reverse
+ * @param endPoint          End of the sub-array that will be written in reverse
  *                          order.
  *
  * @return                  The mutated array.
@@ -42,7 +42,7 @@ std::vector< T_f > twoOpt( const std::vector< T_f >& features,
                            T_idx endPoint );
 
 /**
- * @brief swapPositions     Swap the fetures with his positions specified by
+ * @brief swapPositions     Swap the features with his positions specified by
  *                          \ref beginPoint and \ref endPoint.
  *
  * @param features          Array of features.

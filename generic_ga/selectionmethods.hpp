@@ -48,7 +48,7 @@ template< class T >
 std::vector< T > tournament_elitism( const std::vector< T >& population,
                                      const std::size_t tournamentSize,
                                      const std::size_t newPopulationSize,
-                                     const unsigned long numElites );
+                                     const std::size_t numElites );
 
 }
 
@@ -58,21 +58,21 @@ std::vector< T > SelectionMethod::tournament( const std::vector< T >& population
                                               const std::size_t tournamentSize,
                                               const std::size_t newPopulationSize )
 {
-    std::vector< T >selectedPopulation;
+    std::vector< T > selectedPopulation;
     selectedPopulation.reserve( newPopulationSize );
 
-    std::size_t* ring = new std::size_t[ tournamentSize ];
+    std::size_t* ring = new std::size_t[ tournamentSize ]; // TODO: change to a static array with size = 2.
 
     std::size_t best = 0;
     std::size_t randPos = 0;
 
-    for( unsigned long i = 0; i < newPopulationSize; i++ )
+    for( std::size_t i = 0; i < newPopulationSize; i++ )
     {
         randPos = GeneticUtils::genIntRandNumber< std::size_t >( 0, population.size() - 1 );
         ring[ 0 ] = randPos;
         best = 0;
 
-        for( unsigned long j = 1; j < tournamentSize; j++ )
+        for( std::size_t j = 1; j < tournamentSize; j++ )
         {
             randPos = GeneticUtils::genIntRandNumber< std::size_t >( 0, population.size() - 1 );
             ring[ j ] = randPos;
@@ -94,7 +94,7 @@ template< class T >
 std::vector< T > SelectionMethod::tournament_elitism( const std::vector< T >& population,
                                                       const std::size_t tournamentSize,
                                                       const std::size_t newPopulationSize,
-                                                      const unsigned long numElites )
+                                                      const std::size_t numElites )
 {
     // Get numElite elite solutions to keep.
     std::vector< T > sortedElites = population;
