@@ -145,7 +145,11 @@ std::vector< unsigned long > TTPGA::getLinkernTour( std::string lkOutFileNamePat
 
     tour.reserve( this->problem.numCities + 1 );
 
+#ifdef _MSC_VER
     command = "linkern.exe";
+#else
+    command = "linkern";
+#endif // _MSC_VER
     command += std::string( " -o " ) + lkOutFileNamePath + " ";
     command += this->problem.probFileNamePath;
 
