@@ -2,6 +2,7 @@
 #define TTPMUTATIONMETHODS_HPP
 
 #include <vector>
+#include <array>
 #include <algorithm>
 
 #include "../utils/geneticutils.hpp"
@@ -20,9 +21,13 @@ namespace TTPMutationMethod
  *
  * @param population        Population that will be mutated.
  *
+ * @param alphaProb         Probability of a item be picked or removed from the
+ *                          knapsack.
+ *
  * @return                  The mutated population.
  */
-std::vector< TTPIndividual > twoOpt_bitFlip( const std::vector< TTPIndividual >& population );
+std::vector< TTPIndividual > twoOpt_bitFlip( const std::vector< TTPIndividual >& population,
+                                             const float alphaProb = 0.001f );
 
 /**
  * @brief twoOpt_bitFlip_elitism    Uses the \ref twoOpt_bitFlip() method to mutate
@@ -34,10 +39,17 @@ std::vector< TTPIndividual > twoOpt_bitFlip( const std::vector< TTPIndividual >&
  *
  * @param population                The population that will be mutated.
  *
+ * @param alphaProb                 Probability of a item be picked or removed from the
+ *                                  knapsack.
+ *
  * @return                          The mutated population.
  */
 std::vector< TTPIndividual > twoOpt_bitFlip_elitism( const std::vector< TTPIndividual >& population,
-                                                     const std::size_t numElites );
+                                                     const std::size_t numElites,
+                                                     const float alphaProb = 0.001f );
+
+std::vector< TTPIndividual > doubleBridge_bitFlip( const std::vector< TTPIndividual >& population,
+                                                   const float alphaProb = 0.001f );
 
 }
 

@@ -78,3 +78,4 @@ debug/
 release/
 performance_analysis/
 *.cd
+*.log

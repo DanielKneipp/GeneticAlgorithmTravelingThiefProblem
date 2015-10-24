@@ -24,7 +24,35 @@ void IndividualRecorder::prepareFileLog()
         return;
     }
 
-    outputFile << "{\n\n\n" << "\"individuals\" : {\n\n";
+    outputFile << "{\n\n\n";
+
+    outputFile.close();
+}
+
+void IndividualRecorder::writeInLogFile( const std::string& key, const std::string& value )
+{
+    std::ofstream outputFile( this->destinationFileLog, std::ios::app );
+    if( !outputFile )
+    {
+        std::cerr << "Cannot open the output file: " << this->destinationFileLog << std::endl;
+        return;
+    }
+
+    outputFile << "\n\"" << key << "\": " << "\"" << value << "\",\n" ;
+
+    outputFile.close();
+}
+
+void IndividualRecorder::writeInLogFile( const std::string& str )
+{
+    std::ofstream outputFile( this->destinationFileLog, std::ios::app );
+    if( !outputFile )
+    {
+        std::cerr << "Cannot open the output file: " << this->destinationFileLog << std::endl;
+        return;
+    }
+
+    outputFile << "\n" << str << "\n" ;
 
     outputFile.close();
 }
@@ -38,7 +66,7 @@ void IndividualRecorder::closeFileLog()
         return;
     }
 
-    outputFile << "}\n\n\n}";
+    outputFile << "\n\n\n\n}";
 
     outputFile.close();
 }

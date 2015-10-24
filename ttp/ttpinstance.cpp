@@ -19,6 +19,7 @@ void TTPInstance::readProblem( const std::string& fileName )
     std::ifstream file( fileName );
     if( file.is_open() )
     {
+        this->probFileNamePath = fileName;
         std::size_t probFileNameStartPos = fileName.find_last_of( "/\\" );
         this->probFileName = fileName.substr( probFileNameStartPos + 1 );
         std::replace( this->probFileName.begin(), this->probFileName.end(), '_', '-');
@@ -213,7 +214,16 @@ bool TTPInstance::isValidIndividual( TTPIndividual& individual )
 
 void TTPInstance::removeWorstItemsWhileInvalid( TTPIndividual& individual )
 {
-    std::vector< Item > sortedItemsByPWRatio = this->items;
+    std::vector< Item > sortedItemsByPWRatio;
+    sortedItemsByPWRatio.reserve( this->items.size() );
+
+    for( std::size_t i = 0; i < this->items.size(); i++ )
+    {
+        if( individual.features.pickingPlan[ i ] == 1 )
+        {
+            sortedItemsByPWRatio.push_back( this->items[ i ] );
+        }
+    }
 
     std::sort( sortedItemsByPWRatio.begin(),
                sortedItemsByPWRatio.end(),

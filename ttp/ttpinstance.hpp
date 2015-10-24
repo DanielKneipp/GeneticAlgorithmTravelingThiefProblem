@@ -67,6 +67,8 @@ public:
     std::vector< Item > items;
     /** Problem file name. */
     std::string probFileName;
+    /** Problem file name with path. */
+    std::string probFileNamePath;
 
     /**
      * @brief TTPInstance   Constructor.

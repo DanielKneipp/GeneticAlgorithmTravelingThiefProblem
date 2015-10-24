@@ -54,51 +54,24 @@ std::array< std::vector< T_f >, 2 > CrossoverMethod::alternateNCutPoints( const 
     children[ 0 ].reserve( featureVectorSize );
     children[ 1 ].reserve( featureVectorSize );
 
-    const float p = GeneticUtils::genRealRandNumber< float >( 0.f, 1.f );
-    if( p > 0.5 ) // If it will starts with Parent1 -> Offspring1 and Parent2 -> Offspring2
+    for( std::size_t i = 0, j = 0; i < featureVectorSize; i++ )
     {
-        for( std::size_t i = 0, j = 0; i < featureVectorSize; i++ )
+        if( j < cutPoints.size() && i == cutPoints[ j ] )
         {
-            if( j < cutPoints.size() && i == cutPoints[ j ] )
-            {
-                j++;
-            }
-
-            if( j % 2 == 0 )
-            {
-                // Parent1 -> Offspring1 and Parent2 -> Offspring2
-                children[ 0 ].push_back( featuresParent1[ i ] );
-                children[ 1 ].push_back( featuresParent2[ i ] );
-            }
-            else
-            {
-                // Parent1 -> Offspring2 and Parent2 -> Offspring1
-                children[ 1 ].push_back( featuresParent1[ i ] );
-                children[ 0 ].push_back( featuresParent2[ i ] );
-            }
+            j++;
         }
-    }
-    else
-    {
-        for( std::size_t i = 0, j = 0; i < featureVectorSize; i++ )
-        {
-            if( j < cutPoints.size() && i == cutPoints[ j ] )
-            {
-                j++;
-            }
 
-            if( j % 2 != 0 )
-            {
-                // Parent1 -> Offspring1 and Parent2 -> Offspring2
-                children[ 0 ].push_back( featuresParent1[ i ] );
-                children[ 1 ].push_back( featuresParent2[ i ] );
-            }
-            else
-            {
-                // Parent1 -> Offspring2 and Parent2 -> Offspring1
-                children[ 1 ].push_back( featuresParent1[ i ] );
-                children[ 0 ].push_back( featuresParent2[ i ] );
-            }
+        if( j % 2 == 0 )
+        {
+            // Parent1 -> Offspring1 and Parent2 -> Offspring2
+            children[ 0 ].push_back( featuresParent1[ i ] );
+            children[ 1 ].push_back( featuresParent2[ i ] );
+        }
+        else
+        {
+            // Parent1 -> Offspring2 and Parent2 -> Offspring1
+            children[ 1 ].push_back( featuresParent1[ i ] );
+            children[ 0 ].push_back( featuresParent2[ i ] );
         }
     }
 

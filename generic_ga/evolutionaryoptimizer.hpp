@@ -43,9 +43,9 @@ protected:
 
 
 public:
-    /** Execution Time in seconds. \ref startTime() and \ref stopTime()
+    /** Execution Time in microseconds. \ref startTime() and \ref stopTime()
       * must to be used at this order to \ref executionTime has a value assigned. */
-    std::chrono::duration< double > executionTime;
+    std::chrono::microseconds executionTime;
     /** Problem to be solved. */
     T_prob problem;
 
@@ -91,7 +91,8 @@ void EvolutionaryOptimizer< T_ind, T_prob >::stopTimer()
 {
     this->stopTime = std::chrono::steady_clock::now();
 
-    this->executionTime = this->stopTime - this->startTime;
+    this->executionTime = std::chrono::duration_cast< std::chrono::microseconds >
+                                                    ( this->stopTime - this->startTime );
 }
 
 template< class T_ind, class T_prob >

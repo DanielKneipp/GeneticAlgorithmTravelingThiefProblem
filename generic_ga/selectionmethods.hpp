@@ -50,6 +50,27 @@ std::vector< T > tournament_elitism( const std::vector< T >& population,
                                      const std::size_t newPopulationSize,
                                      const std::size_t numElites );
 
+/**
+ * @brief generic_elitism   Used to perform any selection method with elitism.
+ *                          The elite solutions are included in the selection 
+ *                          procedure.
+ *
+ * @param population        The set of individuals.
+ *
+ * @param numElites         Number of elite solutions to be kept.
+ *
+ * @param newPopulationSize The size of the selected population.
+ *
+ * @param func              The selection method. Must receive an array of 
+ *                          individuals as an input parameter (population), the 
+ *                          new population size and return the same type
+ *                          as the population has (selected population).
+ */
+template< class F, class T_i >
+std::vector< T_i > generic_elitism( const std::vector< T_i >& population,
+                                    const std::size_t numElites,
+                                    const std::size_t newPopulationSize,
+                                    F&& func );
 }
 
 
@@ -109,6 +130,36 @@ std::vector< T > SelectionMethod::tournament_elitism( const std::vector< T >& po
     std::vector< T > selectedPopulation = SelectionMethod::tournament( population,
                                                                        tournamentSize,
                                                                        newPopulationSize - numElites );
+    // Insert the elite solutions group to the selected solutions group.
+    selectedPopulation.insert( selectedPopulation.end(),
+                               sortedElites.begin(),
+                               sortedElites.end() );
+
+    return selectedPopulation;
+}
+
+template< class F, class T_i >
+std::vector< T_i > SelectionMethod::generic_elitism( const std::vector< T_i >& population,
+                                                     const std::size_t numElites,
+                                                     const std::size_t newPopulationSize,
+                                                     F&& func )
+{
+    // Get numElite elite solutions to keep.
+    std::vector< T_i > sortedElites = population;
+    std::partial_sort( sortedElites.begin(),
+                       sortedElites.begin() + numElites,
+                       sortedElites.end(),
+                       []( const T_i& a, const T_i& b ) -> bool
+                       {
+                           return a.fitness > b.fitness;
+                       });
+    sortedElites.erase( sortedElites.begin() + numElites, sortedElites.end() );
+
+    // Use some method to get a selected population
+    // (with size of the population - number of elites). The elite
+    // solutions are included in the tournament.
+    std::vector< T_i > selectedPopulation = func( population,
+                                                  newPopulationSize - numElites );
     // Insert the elite solutions group to the selected solutions group.
     selectedPopulation.insert( selectedPopulation.end(),
                                sortedElites.begin(),

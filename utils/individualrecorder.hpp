@@ -53,6 +53,20 @@ public:
      */
     void prepareFileLog();
     /**
+     * @brief writeInLogFile            Writes a pair of key/value in the log file.
+     *
+     * @param key                       The key of the pair.
+     *
+     * @param value                     The value of the pair.
+     */
+    void writeInLogFile( const std::string& key, const std::string& value );
+    /**
+     * @brief writeInLogFile            Writes some text in the log file.
+     *
+     * @param str                       The text that will be written.
+     */
+    void writeInLogFile( const std::string& str );
+    /**
      * @brief closeFileLog              Writes at the end of the log file 
      *                                  the end of structure.
      */
