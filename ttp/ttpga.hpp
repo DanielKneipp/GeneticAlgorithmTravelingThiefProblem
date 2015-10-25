@@ -27,6 +27,10 @@
 
 struct TTPGAConfig
 {
+    /** Number of individuals (population size). */
+    unsigned NUM_INDIVIDUALS;
+    /** Number of generations. */
+    unsigned NUM_GENERATIONS;
     /** The size of the tournament in the selection step. */
     std::size_t TOURNAMET_SIZE;
     /** The size of the tournament in the crossover step. */
@@ -38,7 +42,7 @@ struct TTPGAConfig
     /** The number of elites in the mutation step. */
     std::size_t MUTATION_NUM_ELITES;
     /** Number of cut points used in the crossover step (KP component).  */
-    unsigned    NUM_CUT_POINTS;
+    unsigned    NUM_CUT_POINTS ;
     /** Probability of a a item be picked or removed from the knapsack. 
       * Used in mutation step (KP component). */
     float       ALPHA_PROBABILITY;
@@ -46,19 +50,19 @@ struct TTPGAConfig
     std::string CONFIG_NAME;
 
     /**
+     * @brief TTPGAConfig   Constructor.
+     */
+    TTPGAConfig();
+    /**
      * @brief toString      Convert \ref TTPGAConfig to his string representation.
      */
-    std::string toString() const
-    {
-        return std::string( "TOURNAMET_SIZE: " ) + std::to_string( this->TOURNAMET_SIZE ) + "\n"
-             + std::string( "TOURNAMET_SIZE_CROSSOVER: " ) + std::to_string( this->TOURNAMET_SIZE_CROSSOVER ) + "\n"
-             + std::string( "SELECTION_NUM_ELITES: " ) + std::to_string( this->SELECTION_NUM_ELITES ) + "\n"
-             + std::string( "SELECTION_NUM_ELITES_CROSSOVER: " ) + std::to_string( this->SELECTION_NUM_ELITES_CROSSOVER ) + "\n"
-             + std::string( "MUTATION_NUM_ELITES: " ) + std::to_string( this->MUTATION_NUM_ELITES ) + "\n"
-             + std::string( "NUM_CUT_POINTS: " ) + std::to_string( this->NUM_CUT_POINTS ) + "\n"
-             + std::string( "ALPHA_PROBABILITY: " ) + std::to_string( this->ALPHA_PROBABILITY ) + "\n"
-             + std::string( "CONFIG_NAME: " ) + this->CONFIG_NAME;
-    }
+    std::string toString() const;
+    /**
+     * @brief readTTPGAConfigFromFile   Read the configuration of TTPGA from a file
+     *
+     * @return                          The configuration structure.
+     */
+    static TTPGAConfig readTTPGAConfigFromFile( std::string fileNamePath );
 };
 
 class TTPGA : public EvolutionaryOptimizer< TTPIndividual, TTPInstance >

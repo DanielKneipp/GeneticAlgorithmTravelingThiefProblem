@@ -189,3 +189,107 @@ std::vector< unsigned long > TTPGA::genRandTSPComponent()
 
     return baseTour;
 }
+
+TTPGAConfig::TTPGAConfig() : NUM_INDIVIDUALS( 0 ),
+                             NUM_GENERATIONS( 0 ),
+                             TOURNAMET_SIZE( 0 ),
+                             TOURNAMET_SIZE_CROSSOVER( 0 ),
+                             SELECTION_NUM_ELITES( 0 ),
+                             SELECTION_NUM_ELITES_CROSSOVER( 0 ),
+                             MUTATION_NUM_ELITES( 0 ),
+                             NUM_CUT_POINTS( 0 ),
+                             ALPHA_PROBABILITY( 0.f ),
+                             CONFIG_NAME( "" ) 
+{}
+
+std::string TTPGAConfig::toString() const
+{
+    return std::string( "NUM_INDIVIDUALS: " ) + std::to_string( this->NUM_INDIVIDUALS ) + "\n"
+         + std::string( "NUM_GENERATIONS: " ) + std::to_string( this->NUM_GENERATIONS ) + "\n"
+         + std::string( "TOURNAMET_SIZE: " ) + std::to_string( this->TOURNAMET_SIZE ) + "\n"
+         + std::string( "TOURNAMET_SIZE_CROSSOVER: " ) + std::to_string( this->TOURNAMET_SIZE_CROSSOVER ) + "\n"
+         + std::string( "SELECTION_NUM_ELITES: " ) + std::to_string( this->SELECTION_NUM_ELITES ) + "\n"
+         + std::string( "SELECTION_NUM_ELITES_CROSSOVER: " ) + std::to_string( this->SELECTION_NUM_ELITES_CROSSOVER ) + "\n"
+         + std::string( "MUTATION_NUM_ELITES: " ) + std::to_string( this->MUTATION_NUM_ELITES ) + "\n"
+         + std::string( "NUM_CUT_POINTS: " ) + std::to_string( this->NUM_CUT_POINTS ) + "\n"
+         + std::string( "ALPHA_PROBABILITY: " ) + std::to_string( this->ALPHA_PROBABILITY ) + "\n"
+         + std::string( "CONFIG_NAME: " ) + this->CONFIG_NAME;
+}
+
+TTPGAConfig TTPGAConfig::readTTPGAConfigFromFile( std::string fileNamePath )
+{
+    std::ifstream file( fileNamePath );
+    TTPGAConfig gaConf;
+    std::string tmpString;
+
+    unsigned short count = 0;
+
+    if( file.is_open() )
+    {
+        file >> tmpString;    
+        while( !file.eof() )
+        {
+            if( tmpString == "NUM_INDIVIDUALS:" )
+            {
+                file >> tmpString;
+                gaConf.NUM_INDIVIDUALS = static_cast< unsigned >( std::stoul( tmpString ) );
+                count++;
+            } else if( tmpString == "NUM_GENERATIONS:" )
+            {
+                file >> tmpString;
+                gaConf.NUM_GENERATIONS = static_cast< unsigned >( std::stoul( tmpString ) );
+                count++;
+            } else if( tmpString == "TOURNAMET_SIZE:" )
+            {
+                file >> tmpString;
+                gaConf.TOURNAMET_SIZE = std::stoull( tmpString );
+                count++;
+            } else if( tmpString == "TOURNAMET_SIZE_CROSSOVER:" )
+            {
+                file >> tmpString;
+                gaConf.TOURNAMET_SIZE_CROSSOVER = std::stoull( tmpString );
+                count++;
+            } else if( tmpString == "SELECTION_NUM_ELITES:" )
+            {
+                file >> tmpString;
+                gaConf.SELECTION_NUM_ELITES = std::stoull( tmpString );
+                count++;
+            } else if( tmpString == "SELECTION_NUM_ELITES_CROSSOVER:" )
+            {
+                file >> tmpString;
+                gaConf.SELECTION_NUM_ELITES_CROSSOVER = std::stoull( tmpString );
+                count++;
+            } else if( tmpString == "MUTATION_NUM_ELITES:" )
+            {
+                file >> tmpString;
+                gaConf.MUTATION_NUM_ELITES = std::stoull( tmpString );
+                count++;
+            } else if( tmpString == "NUM_CUT_POINTS:" )
+            {
+                file >> tmpString;
+                gaConf.NUM_CUT_POINTS = static_cast< unsigned >( std::stoul( tmpString ) );
+                count++;
+            } else if( tmpString == "ALPHA_PROBABILITY:" )
+            {
+                file >> tmpString;
+                gaConf.ALPHA_PROBABILITY = std::stof( tmpString );
+                count++;
+            } else if( tmpString == "CONFIG_NAME:" )
+            {
+                file >> tmpString;
+                gaConf.CONFIG_NAME = tmpString;
+                count++;
+            }
+
+            file >> tmpString;
+        }
+    }
+
+    if( count < 10 )
+    {
+        throw std::invalid_argument( std::string( "The configuration file " ) + fileNamePath +
+                                     " does not have enough parameters to fill TTPGAConfig" );
+    }
+
+    return gaConf;
+}

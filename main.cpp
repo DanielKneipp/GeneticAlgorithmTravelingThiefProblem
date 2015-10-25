@@ -19,31 +19,28 @@ enum ErrorTypes
 void printHelp()
 {
     std::cout << "Usage: GA <TTP-instance-file>" 
-              << " <number-of-individuals>" 
-              << " <number-of-generations>"
+              << " <TTPGA-config-file>" 
               << " [output-directory [standard-output]]" << std::endl;
 }
 
 int main( int argc, char *argv[] )
 {
-    if( argc < 4 )
+    if( argc < 3 )
     {
         printHelp();
         return ErrorTypes::NUM_ARGS;
     }
 
-    unsigned numIndividuals = 0;
-    unsigned numGenerations = 0;
     TTPGA ga;
 
     std::streambuf* stcout = std::cout.rdbuf();
     std::ofstream coutFile;
 
-    if( argc >= 6 )
+    if( argc >= 5 )
     {
         try
         {
-            coutFile = std::ofstream( argv[ 5 ], std::ios::app );
+            coutFile = std::ofstream( argv[ 4 ], std::ios::app );
             std::cout.rdbuf( coutFile.rdbuf() );
         }
         catch( std::exception& e )
@@ -60,34 +57,22 @@ int main( int argc, char *argv[] )
 
     try
     {
-        numIndividuals = static_cast< unsigned >( std::stoul( argv[ 2 ] ) );
-        numGenerations = static_cast< unsigned >( std::stoul( argv[ 3 ] ) );
-
-        TTPGAConfig gaC1;
-        gaC1.TOURNAMET_SIZE                  = 2;
-        gaC1.TOURNAMET_SIZE_CROSSOVER        = 2;
-        gaC1.SELECTION_NUM_ELITES            = static_cast< unsigned long >( numIndividuals * 0.1 );
-        gaC1.SELECTION_NUM_ELITES_CROSSOVER  = static_cast< unsigned long >( numIndividuals * 0.1 );
-        gaC1.MUTATION_NUM_ELITES             = static_cast< unsigned long >( numIndividuals * 0.1 );
-        gaC1.NUM_CUT_POINTS                  = 1;
-        gaC1.ALPHA_PROBABILITY               = 0.005f;
-        gaC1.CONFIG_NAME                     = "GA1";
-
-        std::cout << "GA configurations: \n" << gaC1.toString() << std::endl;
+        TTPGAConfig gaC1 = TTPGAConfig::readTTPGAConfigFromFile( argv[ 2 ] );
 
         ga.gaConfig = gaC1;
 
         TTPInstance problem( argv[ 1 ] );
 
         std::cout << "Problem: " << problem.probFileName << std::endl;
+        std::cout << "GA configurations: \n" << gaC1.toString() << std::endl;
 
-        if( argc >= 5 )
+        if( argc >= 4 )
         {
-            ga.outputDirectory = argv[ 4 ];
+            ga.outputDirectory = argv[ 3 ];
         }
 
         ga.problem = problem;
-        ga.run( numIndividuals, numGenerations );
+        ga.run( gaC1.NUM_INDIVIDUALS, gaC1.NUM_GENERATIONS );
 
         std::vector< TTPIndividual > ind = ga.getBestNIndividuals( 1 );
         std::cout << "Best Individual: " << ind[ 0 ].toString() << std::endl;
