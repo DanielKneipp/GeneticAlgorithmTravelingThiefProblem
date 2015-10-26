@@ -16,6 +16,7 @@ void TTPGA::run( unsigned numIndividuals,
 
 #if defined( __GA_PLOT_ ) || defined( __GA_LOG_ )
     std::string stringSpecs = std::string( "i=" ) + std::to_string( numIndividuals ) +
+                              "-ng="    + std::to_string( numGenerations ) +
                               "-ts_s="  + std::to_string( this->gaConfig.TOURNAMET_SIZE ) +
                               "-ne_s="  + std::to_string( this->gaConfig.SELECTION_NUM_ELITES ) +
                               "-sne_c=" + std::to_string( this->gaConfig.SELECTION_NUM_ELITES_CROSSOVER ) +
@@ -65,7 +66,7 @@ void TTPGA::run( unsigned numIndividuals,
     this->population = this->generatePopulation( numIndividuals );
     this->problem.evaluateIndividuals( this->population );
 
-    for( unsigned i = 0; i < numGenerations; i++ )
+    for( unsigned i = 1; i <= numGenerations; i++ )
     {
         //** Selection Step **//
         this->population = SelectionMethod::generic_elitism( this->population,
@@ -92,11 +93,13 @@ void TTPGA::run( unsigned numIndividuals,
         this->problem.evaluateIndividuals( this->population );
 
         TTPIndividual best = this->getBestNIndividuals( 1 )[ 0 ];
+#ifdef __GA_DETAILED_COUT_
         std::cout << "Generation " << i << " processed." << std::endl;
-        std::cout << "Best individual fitness: " << best.fitness << std::endl;
+        std::cout << "Fitness of the best individual: " << best.fitness << std::endl;
         auto milliExecTime = std::chrono::duration_cast< std::chrono::milliseconds >
                                                        ( std::chrono::steady_clock::now() - this->startTime );
         std::cout << "Execution time: " << milliExecTime.count() << " milliseconds" << std::endl;
+#endif __GA_DETAILED_COUT_
 #ifdef __GA_PLOT_
         rec.recordIndFitnessToFileFit( best );
 #endif //__GA_PLOT_

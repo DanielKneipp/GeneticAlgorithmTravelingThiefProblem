@@ -79,3 +79,4 @@ release/
 performance_analysis/
 *.cd
 *.log
+reports/
