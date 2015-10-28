@@ -7,9 +7,7 @@
 #include <limits>
 #include <algorithm>
 #include <cmath>        // std::nextafter()
-#ifdef _MSC_VER
-    #include <numeric>  // std::iota()
-#endif // _MSC_VER
+#include <numeric>      // std::iota()
 
 namespace GeneticUtils
 {
@@ -118,8 +116,8 @@ std::vector< T_ind > getBestNIndividuals( const std::vector< T_ind >& population
 }
 
 /**
- * @brief getBestNIndividuals       Used to get the best individuals in the
- *                                  population.
+ * @brief getBestNIndividuals       Used to get the individuals in the
+ *                                  population based on a comparative criteria.
  *
  * @param population                The array of individuals.
  *
@@ -130,15 +128,46 @@ std::vector< T_ind > getBestNIndividuals( const std::vector< T_ind >& population
  * @return                          The best individuals in the population.
  */
 template< class T_ind, class Comapre >
-std::vector< T_ind > getBestNIndividuals( const std::vector< T_ind >& population,
-                                          const unsigned numIndividuals,
-                                          Comapre comp )
+std::vector< T_ind > getNIndividuals( const std::vector< T_ind >& population,
+                                      const unsigned numIndividuals,
+                                      Comapre comp )
 {
     std::vector< T_ind > partialSortedPopulation = population;
     std::partial_sort( partialSortedPopulation.begin(),
                        partialSortedPopulation.begin() + numIndividuals,
                        partialSortedPopulation.end(),
                        comp);
+
+    return std::vector< T_ind >( partialSortedPopulation.begin(),
+                                 partialSortedPopulation.begin() + numIndividuals );
+}
+
+/**
+ * @brief getWorstNIndividuals      Used to get the worst individuals in the
+ *                                  population. The function that compares two
+ *                                  individuals returns \c true if some individual
+ *                                  \c a have a fitness lower than other individual
+ *                                  \c b, in that case the individuals with lower
+ *                                  fitness will be returned in the first positions.
+ *
+ * @param population                The array of individuals.
+ *
+ * @param numIndividuals            Number of individuals that will be returned.
+ *
+ * @return                          The worst individuals in the population.
+ */
+template< class T_ind >
+std::vector< T_ind > getWorstNIndividuals( const std::vector< T_ind >& population,
+                                           const unsigned numIndividuals )
+{
+    std::vector< T_ind > partialSortedPopulation = population;
+    std::partial_sort( partialSortedPopulation.begin(),
+                       partialSortedPopulation.begin() + numIndividuals,
+                       partialSortedPopulation.end(),
+                       []( const T_ind& a, const T_ind& b ) -> bool
+                       {
+                           return a.fitness < b.fitness;
+                       });
 
     return std::vector< T_ind >( partialSortedPopulation.begin(),
                                  partialSortedPopulation.begin() + numIndividuals );

@@ -3,6 +3,9 @@
 #include <string>
 #include <chrono>
 #include <fstream>
+#include <numeric>
+#include <algorithm>
+#include <cmath>    // std::sqrt()
 
 #include "ttp/ttpga.hpp"
 #include "ttp/ttpindividual.hpp"
@@ -92,7 +95,7 @@ int main( int argc, char *argv[] )
             }
 
             ga.problem = problem;
-            ga.run( gaC1.NUM_INDIVIDUALS, gaC1.NUM_GENERATIONS );
+            ga.run();
 
             TTPIndividual ind = ga.getBestNIndividuals( 1 )[ 0 ];
             bestIndividuals.push_back( ind );
@@ -111,6 +114,22 @@ int main( int argc, char *argv[] )
         std::cout << "-----  EXECUTION " << i << " DONE  ------" << std::endl
                   << "===============================" << std::endl;
     }
+
+    std::vector< double > fitnessOfTheBests;
+    fitnessOfTheBests.reserve( bestIndividuals.size() );
+    for( TTPIndividual& ind : bestIndividuals )
+    {
+        fitnessOfTheBests.push_back( ind.fitness );
+    }
+
+    double sumFits = std::accumulate( std::begin( fitnessOfTheBests ), std::end( fitnessOfTheBests ), 0.0 );
+    double meanFits = sumFits / fitnessOfTheBests.size();
+    double accum = 0.0;
+    std::for_each( std::begin( fitnessOfTheBests ), std::end( fitnessOfTheBests ), [ & ]( const double d ) 
+                                                                                   {
+                                                                                       accum += ( d - meanFits ) * ( d - meanFits );
+                                                                                   });
+    double stdevFits = std::sqrt( accum / ( fitnessOfTheBests.size() - 1 ) );
     
     std::cout << "\nFitness of the best individuals: " << std::endl;
     for( std::size_t i = 1; i <= bestIndividuals.size(); i++ )
@@ -119,6 +138,9 @@ int main( int argc, char *argv[] )
     }
 
     std::cout << "\nFitness of the best individual of all executions: " << GeneticUtils::getBestNIndividuals( bestIndividuals, 1 )[ 0 ].fitness << std::endl;
+    std::cout << "Fitness of the worst individual of all executions: " << GeneticUtils::getWorstNIndividuals( bestIndividuals, 1 )[ 0 ].fitness << std::endl;
+    std::cout << "Average Fitness: " << meanFits << std::endl;
+    std::cout << "Sample standard deviation: " << stdevFits << std::endl;
 
     std::cout << "\n----------  GA DONE  ----------" << std::endl
               << "===============================" << std::endl;

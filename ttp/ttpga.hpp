@@ -8,6 +8,7 @@
 #include <functional>
 #include <exception>
 #include <string>
+#include <chrono>
 #include <cstdlib>  // std::system()
 #include <cstdio>   // std::remove()
 #ifdef _MSC_VER
@@ -31,6 +32,8 @@ struct TTPGAConfig
     unsigned NUM_INDIVIDUALS;
     /** Number of generations. */
     unsigned NUM_GENERATIONS;
+    /** Maximum execution time. */
+    std::chrono::milliseconds MAX_EXEC_TIME;
     /** The size of the tournament in the selection step. */
     std::size_t TOURNAMET_SIZE;
     /** The size of the tournament in the crossover step. */
@@ -106,8 +109,7 @@ public:
     /**
      * @brief run       Execute the evolutionary solver method.
      */
-    virtual void run( unsigned numIndividuals,
-                      unsigned numGenerations = 0 );
+    virtual void run();
 };
 
 #endif // TTPGA_HPP

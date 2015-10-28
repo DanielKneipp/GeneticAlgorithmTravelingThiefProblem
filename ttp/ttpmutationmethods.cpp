@@ -13,6 +13,42 @@ std::vector< TTPIndividual > twoOpt_bitFlip( const std::vector< TTPIndividual >&
     {
         TTPIndividual mutatedIndividual = individual;
 
+      
+        //** 2-opt **//
+        // Generating start and end cut points.
+        // Don't get the last and first city because they should be the first city (1).
+        std::size_t beginPoint = GeneticUtils::genIntRandNumber< std::size_t >( 1,
+                                                                                individual.features.tour.size() - 3 );
+        std::size_t endPoint = GeneticUtils::genIntRandNumber< std::size_t >( beginPoint + 1,
+                                                                              individual.features.tour.size() - 2 );
+        // Reverse.
+        mutatedIndividual.features.tour = MutationMethods::twoOpt< unsigned long, std::size_t >
+                                                                 ( individual.features.tour,
+                                                                   beginPoint,
+                                                                   endPoint );
+
+        //** Bit flip **//
+        mutatedIndividual.features.pickingPlan = MutationMethods::bitFlip< unsigned short >
+                                                                         ( individual.features.pickingPlan,
+                                                                           alphaProb );
+
+
+        mutatedPopulation.push_back( mutatedIndividual );
+    }
+
+    return mutatedPopulation;
+}
+
+std::vector< TTPIndividual > twoOpt_bitFlip_likely( const std::vector< TTPIndividual >& population,
+                                                    const float alphaProb )
+{
+    std::vector< TTPIndividual > mutatedPopulation;
+    mutatedPopulation.reserve( population.size() );
+
+    for( const TTPIndividual& individual : population )
+    {
+        TTPIndividual mutatedIndividual = individual;
+
         float p = GeneticUtils::genRealRandNumber< float >( 0.f, 1.f );
 
         if( p < 0.65 )          // 65% of chance

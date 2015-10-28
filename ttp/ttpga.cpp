@@ -2,10 +2,9 @@
 
 TTPGA::TTPGA() : outputDirectory( "" ) {}
 
-void TTPGA::run( unsigned numIndividuals,
-                 unsigned numGenerations )
+void TTPGA::run()
 {
-    if( numIndividuals % 2 != 0 )
+    if( this->gaConfig.NUM_INDIVIDUALS % 2 != 0 )
     {
         throw std::invalid_argument( "numIndividuals must to be an even number" );
     }
@@ -15,8 +14,9 @@ void TTPGA::run( unsigned numIndividuals,
     }
 
 #if defined( __GA_PLOT_ ) || defined( __GA_LOG_ )
-    std::string stringSpecs = std::string( "i=" ) + std::to_string( numIndividuals ) +
-                              "-ng="    + std::to_string( numGenerations ) +
+    std::string stringSpecs = std::string( "i=" ) + std::to_string( this->gaConfig.NUM_INDIVIDUALS ) +
+                              "-ng="    + std::to_string( this->gaConfig.NUM_GENERATIONS ) +
+                              "-t="     + std::to_string( this->gaConfig.MAX_EXEC_TIME.count() ) +
                               "-ts_s="  + std::to_string( this->gaConfig.TOURNAMET_SIZE ) +
                               "-ne_s="  + std::to_string( this->gaConfig.SELECTION_NUM_ELITES ) +
                               "-sne_c=" + std::to_string( this->gaConfig.SELECTION_NUM_ELITES_CROSSOVER ) +
@@ -47,7 +47,7 @@ void TTPGA::run( unsigned numIndividuals,
 #endif // __GA_PLOT_
 
     // std::function< std::vector< TTPIndividual >( const std::vector< TTPIndividual >& ) > 
-    auto mutFunc = std::bind( TTPMutationMethod::twoOpt_bitFlip, 
+    auto mutFunc = std::bind( TTPMutationMethod::twoOpt_bitFlip_likely, 
                               std::placeholders::_1, 
                               this->gaConfig.ALPHA_PROBABILITY );
     // std::function< std::vector< TTPIndividual >( const std::vector< TTPIndividual >&, std::size_t ) >
@@ -63,25 +63,25 @@ void TTPGA::run( unsigned numIndividuals,
 
     this->startTimer();
 
-    this->population = this->generatePopulation( numIndividuals );
+    this->population = this->generatePopulation( this->gaConfig.NUM_INDIVIDUALS );
     this->problem.evaluateIndividuals( this->population );
 
-    for( unsigned i = 1; i <= numGenerations; i++ )
+    for( unsigned i = 1; i <= this->gaConfig.NUM_GENERATIONS; i++ )
     {
         //** Selection Step **//
         this->population = SelectionMethod::generic_elitism( this->population,
                                                              this->gaConfig.SELECTION_NUM_ELITES_CROSSOVER,
-                                                             numIndividuals ,
+                                                             this->gaConfig.NUM_INDIVIDUALS ,
                                                              selFunc );
 
         //** Crossover Step **//
         std::vector< TTPIndividual > children = TTPCrossoverMethod::orderBased_alternate( this->population,
                                                                                           this->gaConfig.NUM_CUT_POINTS );
+        this->problem.evaluateIndividuals( children );
         this->population.insert( this->population.end(), children.begin(), children.end() );
-        this->problem.evaluateIndividuals( this->population );
         this->population = SelectionMethod::generic_elitism( this->population,
                                                              this->gaConfig.SELECTION_NUM_ELITES_CROSSOVER,
-                                                             numIndividuals ,
+                                                             this->gaConfig.NUM_INDIVIDUALS ,
                                                              selFunc_cross );
 
         //** Mutation Step **//
@@ -92,29 +92,40 @@ void TTPGA::run( unsigned numIndividuals,
         //** Evaluation Step **//
         this->problem.evaluateIndividuals( this->population );
 
+        auto milliExecTime = std::chrono::duration_cast< std::chrono::milliseconds >
+                                                       ( std::chrono::steady_clock::now() - this->startTime );
+
+        if( this->gaConfig.MAX_EXEC_TIME.count() != 0 && 
+            milliExecTime.count() > this->gaConfig.MAX_EXEC_TIME.count() )
+        {
+            break;
+        }
+
+#if defined( __GA_PLOT_ ) || defined( __GA_PLOT_ ) || defined( __GA_DETAILED_COUT_ )
         TTPIndividual best = this->getBestNIndividuals( 1 )[ 0 ];
+#endif // __GA_PLOT_ || __GA_LOG_ || __GA_DETAILED_COUT_
 #ifdef __GA_DETAILED_COUT_
         std::cout << "Generation " << i << " processed." << std::endl;
         std::cout << "Fitness of the best individual: " << best.fitness << std::endl;
-        auto milliExecTime = std::chrono::duration_cast< std::chrono::milliseconds >
-                                                       ( std::chrono::steady_clock::now() - this->startTime );
         std::cout << "Execution time: " << milliExecTime.count() << " milliseconds" << std::endl;
-#endif __GA_DETAILED_COUT_
+#endif // __GA_DETAILED_COUT_
 #ifdef __GA_PLOT_
         rec.recordIndFitnessToFileFit( best );
-#endif //__GA_PLOT_
+#endif // __GA_PLOT_
 #ifdef __GA_LOG_
         rec.recordIndFitnessToFileLog( best );
 #endif // __GA_LOG_
     }
+
     this->stopTimer();
+
 #ifdef __GA_LOG_
     rec.writeInLogFile( "\n}");
     rec.closeFileLog();
 #endif // __GA_LOG_
 #ifdef __GA_PLOT_
     rec.plot( "plotGAData.gp", this->gaConfig.CONFIG_NAME );
-#endif //__GA_PLOT_
+#endif // __GA_PLOT_
 }
 
 std::vector< TTPIndividual > TTPGA::generatePopulation( unsigned numIndividuals )
@@ -209,6 +220,7 @@ std::string TTPGAConfig::toString() const
 {
     return std::string( "NUM_INDIVIDUALS: " ) + std::to_string( this->NUM_INDIVIDUALS ) + "\n"
          + std::string( "NUM_GENERATIONS: " ) + std::to_string( this->NUM_GENERATIONS ) + "\n"
+         + std::string( "MAX_EXEC_TIME: " ) + std::to_string( this->MAX_EXEC_TIME.count() ) + "\n"
          + std::string( "TOURNAMET_SIZE: " ) + std::to_string( this->TOURNAMET_SIZE ) + "\n"
          + std::string( "TOURNAMET_SIZE_CROSSOVER: " ) + std::to_string( this->TOURNAMET_SIZE_CROSSOVER ) + "\n"
          + std::string( "SELECTION_NUM_ELITES: " ) + std::to_string( this->SELECTION_NUM_ELITES ) + "\n"
@@ -242,6 +254,11 @@ TTPGAConfig TTPGAConfig::readTTPGAConfigFromFile( std::string fileNamePath )
                 file >> tmpString;
                 gaConf.NUM_GENERATIONS = static_cast< unsigned >( std::stoul( tmpString ) );
                 count++;
+            } else if( tmpString == "MAX_EXEC_TIME:" )
+            {
+                file >> tmpString;
+                gaConf.MAX_EXEC_TIME = std::chrono::milliseconds( std::stoul( tmpString ) );
+                count++; 
             } else if( tmpString == "TOURNAMET_SIZE:" )
             {
                 file >> tmpString;

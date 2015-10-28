@@ -91,6 +91,11 @@ public:
      * @brief evaluateIndividual    Evaluate the individual and set
      *                              his fitness. Cost function used is in:
      *                              A Comprehensive Benchmark Set and Heuristics.
+     *                              If \ref individual is a invalid solution than
+     *                              the \ref removeWorstItemsWhileInvalid() method is applied
+     *                              to correct the individual removing his worst picked items 
+     *                              (items with the lowest values of profit/weight) until his become
+     *                              feasible.
      *
      * @param individual            \ref TTPIndividual that will be evaluated.
      */

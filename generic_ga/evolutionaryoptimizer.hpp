@@ -60,8 +60,7 @@ public:
     /**
      * @brief run                       Execute the evolutionary solver method.
      */
-    virtual void run( unsigned numIndividuals,
-                      unsigned numGenerations = 0 ) = 0;
+    virtual void run() = 0;
     /**
      * @brief getBestNIndividuals       Used to get the best individuals in the
      *                                  population.

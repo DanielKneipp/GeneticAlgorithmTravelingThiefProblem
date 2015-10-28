@@ -7,7 +7,7 @@
 
 #include "../generic_ga/crossovermethods.hpp"
 
-#include"../utils/geneticutils.hpp"
+#include "../utils/geneticutils.hpp"
 
 #include "ttpindividual.hpp"
 
@@ -18,7 +18,7 @@ namespace TTPCrossoverMethod
  * @brief orderBased_alternate      Perform a n-point crossover operation for KP component
  *                                  and an Order-based crossover operation for TSP component.
  *
- * @param population                The arra of {@ref TTPIndividual}.
+ * @param population                The array of {@ref TTPIndividual}.
  *
  * @param numCutPoints              Number of cut points required. They will be generated
  *                                  randomly.
