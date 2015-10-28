@@ -16,8 +16,7 @@ namespace TTPMutationMethod
 
 /**
  * @brief twoOpt_bitFlip    Uses the 2-Opt method with random cut points
- *                          for the tour component and Bit Flip method with 50% chance
- *                          that a bit be flipped for the picking plan component
+ *                          for the tour component and Bit Flip method.
  *
  * @param population        Population that will be mutated.
  *
@@ -64,6 +63,17 @@ std::vector< TTPIndividual > twoOpt_bitFlip_elitism( const std::vector< TTPIndiv
                                                      const std::size_t numElites,
                                                      const float alphaProb = 0.001f );
 
+/**
+ * @brief doubleBridge_bitFlip      Uses the Double-Bridge method with random cut points
+ *                                  for the tour component and Bit Flip method.
+ *
+ * @param population                Population that will be mutated.
+ *
+ * @param alphaProb                 Probability of a item be picked or removed from the
+ *                                  knapsack.
+ *
+ * @return                          The mutated population.
+ */
 std::vector< TTPIndividual > doubleBridge_bitFlip( const std::vector< TTPIndividual >& population,
                                                    const float alphaProb = 0.001f );
 

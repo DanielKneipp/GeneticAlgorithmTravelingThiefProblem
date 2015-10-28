@@ -104,6 +104,7 @@ int main( int argc, char *argv[] )
             std::cout << "Total Execution Time: " << std::chrono::duration_cast< std::chrono::milliseconds >
                                                                                ( ga.executionTime ).count() 
                                                   << " milliseconds" << std::endl;
+            std::cout << "Number of processed generations: " << ga.numProcGens << std::endl;
         }
         catch( std::exception& e )
         {

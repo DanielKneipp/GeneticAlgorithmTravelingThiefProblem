@@ -30,8 +30,8 @@ struct TTPGAConfig
 {
     /** Number of individuals (population size). */
     unsigned NUM_INDIVIDUALS;
-    /** Number of generations. */
-    unsigned NUM_GENERATIONS;
+    /** Maximum number of generations without any improvement. */
+    unsigned MAX_GENS_WITHOUT_IMPROV;
     /** Maximum execution time. */
     std::chrono::milliseconds MAX_EXEC_TIME;
     /** The size of the tournament in the selection step. */
@@ -84,9 +84,15 @@ protected:
      * @brief getLinkernTour        Generate a solution for TSP component
      *                              given by the Lin-Kernighan algorithm.
      *
+     * @param lkOutFileName         File that will store the output generated
+     *                              by the Lin-Kernighan program.
+     *
+     * @param delFile               Set to \c true to delete the file \ref lkOutFileName
+     *                              after the execution of this method.
+     *
      * @return                      A solution for the TSP component (tour).
      */
-    std::vector< unsigned long > getLinkernTour( std::string lkOutFileName );
+    std::vector< unsigned long > getLinkernTour( std::string lkOutFileName, bool delFile = false );
     /**
      * @brief genRandTSPComponent   Generate a random solution (feasible) for 
      *                              TSP component.
@@ -99,6 +105,8 @@ protected:
 public:
     /** Specify the output directory of the execution data. */
     std::string outputDirectory;
+    /** Number of processed generations */
+    std::size_t numProcGens;
     /** Configuration of the GA. */
     TTPGAConfig gaConfig;
 

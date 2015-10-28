@@ -1,6 +1,8 @@
 #include "ttpga.hpp"
 
-TTPGA::TTPGA() : outputDirectory( "" ) {}
+TTPGA::TTPGA() : outputDirectory( "" ),
+                 numProcGens( 0 )
+{}
 
 void TTPGA::run()
 {
@@ -13,9 +15,15 @@ void TTPGA::run()
         throw std::logic_error( "Problem is not loaded yet!" );
     }
 
+    unsigned countGens = 0;
+    this->numProcGens = 0;
+
+    unsigned countGensWithoutImprov = 0;
+    std::chrono::milliseconds milliExecTime = std::chrono::milliseconds( 0 );
+
 #if defined( __GA_PLOT_ ) || defined( __GA_LOG_ )
     std::string stringSpecs = std::string( "i=" ) + std::to_string( this->gaConfig.NUM_INDIVIDUALS ) +
-                              "-ng="    + std::to_string( this->gaConfig.NUM_GENERATIONS ) +
+                              "-ng="    + std::to_string( this->gaConfig.MAX_GENS_WITHOUT_IMPROV ) +
                               "-t="     + std::to_string( this->gaConfig.MAX_EXEC_TIME.count() ) +
                               "-ts_s="  + std::to_string( this->gaConfig.TOURNAMET_SIZE ) +
                               "-ne_s="  + std::to_string( this->gaConfig.SELECTION_NUM_ELITES ) +
@@ -66,7 +74,12 @@ void TTPGA::run()
     this->population = this->generatePopulation( this->gaConfig.NUM_INDIVIDUALS );
     this->problem.evaluateIndividuals( this->population );
 
-    for( unsigned i = 1; i <= this->gaConfig.NUM_GENERATIONS; i++ )
+    TTPIndividual bestIndCurr = this->getBestNIndividuals( 1 )[ 0 ];
+    
+
+    while( countGensWithoutImprov < this->gaConfig.MAX_GENS_WITHOUT_IMPROV && 
+           ( this->gaConfig.MAX_EXEC_TIME.count() == 0 || 
+             milliExecTime.count() < this->gaConfig.MAX_EXEC_TIME.count() ) )
     {
         //** Selection Step **//
         this->population = SelectionMethod::generic_elitism( this->population,
@@ -92,32 +105,41 @@ void TTPGA::run()
         //** Evaluation Step **//
         this->problem.evaluateIndividuals( this->population );
 
-        auto milliExecTime = std::chrono::duration_cast< std::chrono::milliseconds >
-                                                       ( std::chrono::steady_clock::now() - this->startTime );
 
-        if( this->gaConfig.MAX_EXEC_TIME.count() != 0 && 
-            milliExecTime.count() > this->gaConfig.MAX_EXEC_TIME.count() )
+        milliExecTime = std::chrono::duration_cast< std::chrono::milliseconds >
+                                                  ( std::chrono::steady_clock::now() - this->startTime );
+
+
+        TTPIndividual bestIndGen = this->getBestNIndividuals( 1 )[ 0 ];
+
+        if( bestIndGen.fitness <= bestIndCurr.fitness )
         {
-            break;
+            countGensWithoutImprov++;
+        } 
+        else 
+        {
+            countGensWithoutImprov = 0;
+            bestIndCurr = bestIndGen;
         }
 
-#if defined( __GA_PLOT_ ) || defined( __GA_PLOT_ ) || defined( __GA_DETAILED_COUT_ )
-        TTPIndividual best = this->getBestNIndividuals( 1 )[ 0 ];
-#endif // __GA_PLOT_ || __GA_LOG_ || __GA_DETAILED_COUT_
 #ifdef __GA_DETAILED_COUT_
-        std::cout << "Generation " << i << " processed." << std::endl;
-        std::cout << "Fitness of the best individual: " << best.fitness << std::endl;
+        std::cout << "Generation " << countGens + 1 << " processed." << std::endl;
+        std::cout << "Fitness of the best individual: " << bestIndGen.fitness << std::endl;
         std::cout << "Execution time: " << milliExecTime.count() << " milliseconds" << std::endl;
 #endif // __GA_DETAILED_COUT_
 #ifdef __GA_PLOT_
-        rec.recordIndFitnessToFileFit( best );
+        rec.recordIndFitnessToFileFit( bestIndGen );
 #endif // __GA_PLOT_
 #ifdef __GA_LOG_
-        rec.recordIndFitnessToFileLog( best );
+        rec.recordIndFitnessToFileLog( bestIndGen );
 #endif // __GA_LOG_
+
+        countGens++;
     }
 
     this->stopTimer();
+
+    this->numProcGens = countGens;
 
 #ifdef __GA_LOG_
     rec.writeInLogFile( "\n}");
@@ -139,7 +161,7 @@ std::vector< TTPIndividual > TTPGA::generatePopulation( unsigned numIndividuals 
 
 
         //** Generating TSP component **//
-        individual.features.tour = this->getLinkernTour( "lk.tour.temp" );
+        individual.features.tour = this->getLinkernTour( "lk.tour.temp", true );
 
 
         //** Generating KP component **//
@@ -152,7 +174,7 @@ std::vector< TTPIndividual > TTPGA::generatePopulation( unsigned numIndividuals 
     return population;
 }
 
-std::vector< unsigned long > TTPGA::getLinkernTour( std::string lkOutFileNamePath )
+std::vector< unsigned long > TTPGA::getLinkernTour( std::string lkOutFileNamePath, bool delFile )
 {
     std::string command;
     std::vector< unsigned long > tour;
@@ -188,8 +210,13 @@ std::vector< unsigned long > TTPGA::getLinkernTour( std::string lkOutFileNamePat
     {
         throw std::invalid_argument( std::string( "Cannot read the linkern output file " ) + lkOutFileNamePath );
     }
+
     lkOutFile.close();
-    std::remove( lkOutFileNamePath.c_str() );
+    if( delFile )
+    {
+        std::remove( lkOutFileNamePath.c_str() );
+    }
+    
     return tour;
 }
 
@@ -205,7 +232,7 @@ std::vector< unsigned long > TTPGA::genRandTSPComponent()
 }
 
 TTPGAConfig::TTPGAConfig() : NUM_INDIVIDUALS( 0 ),
-                             NUM_GENERATIONS( 0 ),
+                             MAX_GENS_WITHOUT_IMPROV( 0 ),
                              TOURNAMET_SIZE( 0 ),
                              TOURNAMET_SIZE_CROSSOVER( 0 ),
                              SELECTION_NUM_ELITES( 0 ),
@@ -219,7 +246,7 @@ TTPGAConfig::TTPGAConfig() : NUM_INDIVIDUALS( 0 ),
 std::string TTPGAConfig::toString() const
 {
     return std::string( "NUM_INDIVIDUALS: " ) + std::to_string( this->NUM_INDIVIDUALS ) + "\n"
-         + std::string( "NUM_GENERATIONS: " ) + std::to_string( this->NUM_GENERATIONS ) + "\n"
+         + std::string( "MAX_GENS_WITHOUT_IMPROV: " ) + std::to_string( this->MAX_GENS_WITHOUT_IMPROV ) + "\n"
          + std::string( "MAX_EXEC_TIME: " ) + std::to_string( this->MAX_EXEC_TIME.count() ) + "\n"
          + std::string( "TOURNAMET_SIZE: " ) + std::to_string( this->TOURNAMET_SIZE ) + "\n"
          + std::string( "TOURNAMET_SIZE_CROSSOVER: " ) + std::to_string( this->TOURNAMET_SIZE_CROSSOVER ) + "\n"
@@ -249,10 +276,10 @@ TTPGAConfig TTPGAConfig::readTTPGAConfigFromFile( std::string fileNamePath )
                 file >> tmpString;
                 gaConf.NUM_INDIVIDUALS = static_cast< unsigned >( std::stoul( tmpString ) );
                 count++;
-            } else if( tmpString == "NUM_GENERATIONS:" )
+            } else if( tmpString == "MAX_GENS_WITHOUT_IMPROV:" )
             {
                 file >> tmpString;
-                gaConf.NUM_GENERATIONS = static_cast< unsigned >( std::stoul( tmpString ) );
+                gaConf.MAX_GENS_WITHOUT_IMPROV = static_cast< unsigned >( std::stoul( tmpString ) );
                 count++;
             } else if( tmpString == "MAX_EXEC_TIME:" )
             {
