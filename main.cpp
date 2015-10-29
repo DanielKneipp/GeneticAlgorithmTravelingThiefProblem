@@ -80,14 +80,14 @@ int main( int argc, char *argv[] )
 
         try
         {
-            TTPGAConfig gaC1 = TTPGAConfig::readTTPGAConfigFromFile( argv[ 2 ] );
+            TTPGAConfig gaC = TTPGAConfig::readTTPGAConfigFromFile( argv[ 2 ] );
 
-            ga.gaConfig = gaC1;
+            ga.gaConfig = gaC;
 
             TTPInstance problem( argv[ 1 ] );
 
             std::cout << "Problem: " << problem.probFileName << std::endl;
-            std::cout << "GA configurations: \n" << gaC1.toString() << std::endl;
+            std::cout << gaC.toString() << std::endl;
 
             if( argc >= 5 )
             {
@@ -99,9 +99,9 @@ int main( int argc, char *argv[] )
 
             TTPIndividual ind = ga.getBestNIndividuals( 1 )[ 0 ];
             bestIndividuals.push_back( ind );
-            std::cout << "Best Individual: " << ind.toString() << std::endl;
+            std::cout << "Best individual: " << ind.toString() << std::endl;
 
-            std::cout << "Total Execution Time: " << std::chrono::duration_cast< std::chrono::milliseconds >
+            std::cout << "Total execution time: " << std::chrono::duration_cast< std::chrono::milliseconds >
                                                                                ( ga.executionTime ).count() 
                                                   << " milliseconds" << std::endl;
             std::cout << "Number of processed generations: " << ga.numProcGens << std::endl;
@@ -140,7 +140,7 @@ int main( int argc, char *argv[] )
 
     std::cout << "\nFitness of the best individual of all executions: " << GeneticUtils::getBestNIndividuals( bestIndividuals, 1 )[ 0 ].fitness << std::endl;
     std::cout << "Fitness of the worst individual of all executions: " << GeneticUtils::getWorstNIndividuals( bestIndividuals, 1 )[ 0 ].fitness << std::endl;
-    std::cout << "Average Fitness: " << meanFits << std::endl;
+    std::cout << "Average fitness: " << meanFits << std::endl;
     std::cout << "Sample standard deviation: " << stdevFits << std::endl;
 
     std::cout << "\n----------  GA DONE  ----------" << std::endl
