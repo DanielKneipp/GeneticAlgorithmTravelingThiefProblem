@@ -22,7 +22,6 @@ void TTPInstance::readProblem( const std::string& fileName )
         this->probFileNamePath = fileName;
         std::size_t probFileNameStartPos = fileName.find_last_of( "/\\" );
         this->probFileName = fileName.substr( probFileNameStartPos + 1 );
-        std::replace( this->probFileName.begin(), this->probFileName.end(), '_', '-');
 
         std::string tmpString;
         while( true )

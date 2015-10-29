@@ -24,7 +24,7 @@ void IndividualRecorder::prepareFileLog()
         return;
     }
 
-    outputFile << "{\n\n\n";
+    outputFile << "{\n\n\n\n";
 
     outputFile.close();
 }
@@ -38,7 +38,7 @@ void IndividualRecorder::writeInLogFile( const std::string& key, const std::stri
         return;
     }
 
-    outputFile << "\n\"" << key << "\": " << "\"" << value << "\",\n" ;
+    outputFile << "\"" << key << "\": " << "\"" << value << "\",\n" ;
 
     outputFile.close();
 }
@@ -66,7 +66,7 @@ void IndividualRecorder::closeFileLog()
         return;
     }
 
-    outputFile << "\n\n\n\n}";
+    outputFile << "\n\n\n}";
 
     outputFile.close();
 }

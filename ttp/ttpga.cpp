@@ -26,12 +26,12 @@ void TTPGA::run()
                               "-ng="    + std::to_string( this->gaConfig.MAX_GENS_WITHOUT_IMPROV ) +
                               "-t="     + std::to_string( this->gaConfig.MAX_EXEC_TIME.count() ) +
                               "-ts_s="  + std::to_string( this->gaConfig.TOURNAMET_SIZE ) +
+                              "-ts_c="  + std::to_string( this->gaConfig.TOURNAMET_SIZE_CROSSOVER ) +
                               "-ne_s="  + std::to_string( this->gaConfig.SELECTION_NUM_ELITES ) +
                               "-sne_c=" + std::to_string( this->gaConfig.SELECTION_NUM_ELITES_CROSSOVER ) +
-                              "-ts_c="  + std::to_string( this->gaConfig.TOURNAMET_SIZE_CROSSOVER ) +
+                              "-ne_m="  + std::to_string( this->gaConfig.MUTATION_NUM_ELITES ) +
                               "-nc_c="  + std::to_string( this->gaConfig.NUM_CUT_POINTS ) +
-                              "-a_m="   + std::to_string( this->gaConfig.ALPHA_PROBABILITY ) +
-                              "-ne_m="  + std::to_string( this->gaConfig.MUTATION_NUM_ELITES );
+                              "-a_m="   + std::to_string( this->gaConfig.ALPHA_PROBABILITY );
 
     IndividualRecorder rec;
 #endif // __GA_PLOT_ || __GA_LOG_
@@ -47,12 +47,19 @@ void TTPGA::run()
                                "__" + IndividualRecorder::getSuffixDateTime() + 
                                "__" + stringSpecs + ".log" );
     rec.prepareFileLog();
-    rec.writeInLogFile( "GA_specs", stringSpecs );
+    rec.writeInLogFile( "NUM_INDIVIDUALS", std::to_string( this->gaConfig.NUM_INDIVIDUALS ) );
+    rec.writeInLogFile( "MAX_GENS_WITHOUT_IMPROV", std::to_string( this->gaConfig.MAX_GENS_WITHOUT_IMPROV ) );
+    rec.writeInLogFile( "MAX_EXEC_TIME", std::to_string( this->gaConfig.MAX_EXEC_TIME.count() ) );
+    rec.writeInLogFile( "TOURNAMET_SIZE", std::to_string( this->gaConfig.TOURNAMET_SIZE ) );
+    rec.writeInLogFile( "TOURNAMET_SIZE_CROSSOVER", std::to_string( this->gaConfig.TOURNAMET_SIZE_CROSSOVER ) );
+    rec.writeInLogFile( "SELECTION_NUM_ELITES", std::to_string( this->gaConfig.SELECTION_NUM_ELITES ) );
+    rec.writeInLogFile( "SELECTION_NUM_ELITES_CROSSOVER", std::to_string( this->gaConfig.SELECTION_NUM_ELITES_CROSSOVER ) );
+    rec.writeInLogFile( "MUTATION_NUM_ELITES", std::to_string( this->gaConfig.MUTATION_NUM_ELITES ) );
+    rec.writeInLogFile( "NUM_CUT_POINTS", std::to_string( this->gaConfig.NUM_CUT_POINTS ) );
+    rec.writeInLogFile( "ALPHA_PROBABILITY", std::to_string( this->gaConfig.ALPHA_PROBABILITY ) );
+    rec.writeInLogFile( "CONFIG_NAME", this->gaConfig.CONFIG_NAME );
     rec.writeInLogFile(  "\"individuals\" : {\n\n" );
 #endif // __GA_LOG_
-#ifdef __GA_PLOT_
-    stringSpecs += std::string( "  " ) + this->problem.probFileName;
-#endif // __GA_PLOT_
 
     // std::function< std::vector< TTPIndividual >( const std::vector< TTPIndividual >& ) > 
     auto mutFunc = std::bind( TTPMutationMethod::twoOpt_bitFlip_likely, 
@@ -142,7 +149,7 @@ void TTPGA::run()
     this->numProcGens = countGens;
 
 #ifdef __GA_LOG_
-    rec.writeInLogFile( "\n}");
+    rec.writeInLogFile( "}");
     rec.closeFileLog();
 #endif // __GA_LOG_
 #ifdef __GA_PLOT_
@@ -184,7 +191,7 @@ std::vector< unsigned long > TTPGA::getLinkernTour( std::string lkOutFileNamePat
 #ifdef _MSC_VER
     command = "linkern.exe";
 #else
-    command = "linkern";
+    command = "./linkern";
 #endif // _MSC_VER
     command += std::string( " -o " ) + lkOutFileNamePath + " ";
     command += this->problem.probFileNamePath;

@@ -9,11 +9,9 @@
 #include <exception>
 #include <string>
 #include <chrono>
+#include <numeric>
 #include <cstdlib>  // std::system()
 #include <cstdio>   // std::remove()
-#ifdef _MSC_VER
-#include <numeric>  // std::iota()
-#endif // _MSC_VER
 
 #include "../generic_ga/evolutionaryoptimizer.hpp"
 #include "../generic_ga/individual.hpp"
@@ -46,7 +44,7 @@ struct TTPGAConfig
     std::size_t MUTATION_NUM_ELITES;
     /** Number of cut points used in the crossover step (KP component).  */
     unsigned    NUM_CUT_POINTS ;
-    /** Probability of a a item be picked or removed from the knapsack. 
+    /** Probability of a item be picked or removed from the knapsack.
       * Used in mutation step (KP component). */
     float       ALPHA_PROBABILITY;
     /** Name of the configuration (will appear as the data label in the plot). */
