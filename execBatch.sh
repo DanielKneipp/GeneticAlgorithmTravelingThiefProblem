@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$(pwd)"
+
 EXEC="./GA"
 NUM_EXECS=30
 GA_CONF="gaConf1.gaconf"
@@ -10,7 +12,7 @@ PROBLEM_LIST="$(find . -name "*.ttp")"
 for ttp in ${PROBLEM_LIST}
 do
     ttp_name=$(basename $ttp)
-    $EXEC $ttp $GA_CONF $NUM_EXECS $REPORTS_PATH "${STDCOUT_FILE}__${ttp_name}.log"
+    echo $EXEC $ttp $GA_CONF $NUM_EXECS $REPORTS_PATH "${STDCOUT_FILE}__${ttp_name}.log"
 done
 
 # GA instances/kroA100-ttp/kroA100_n990_uncorr_10.ttp gaConf1.gaconf 30 reports/ stdcout__kroA100_n990_uncorr_10.ttp.log

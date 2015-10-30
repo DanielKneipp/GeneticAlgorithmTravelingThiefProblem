@@ -1,5 +1,5 @@
-#ifndef CITY_H
-#define CITY_H
+#ifndef CITY_HPP
+#define CITY_HPP
 
 #include <cmath>        // std::pow(), std::sqrt()
 #include <stdexcept>
@@ -43,4 +43,4 @@ public:
     void  calcPwRatio();
 };
 
-#endif // CITY_H
+#endif // CITY_HPP

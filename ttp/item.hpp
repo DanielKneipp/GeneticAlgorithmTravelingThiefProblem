@@ -1,5 +1,5 @@
-#ifndef ITEM_H
-#define ITEM_H
+#ifndef ITEM_HPP
+#define ITEM_HPP
 
 #include <stdexcept>
 #include <string>
@@ -26,9 +26,9 @@ public:
     /**
      * @brief calcPwRatio   Calculate the ratio between the \ref profit and
      *                      \ref weight. If \ref weight is equal to 0,
-     *                      than a std::overflow_error exception will be throwed.
+     *                      than a std::overflow_error exception will be thrown.
      */
     void  calcPwRatio();
 };
 
-#endif // ITEM_H
+#endif // ITEM_HPP

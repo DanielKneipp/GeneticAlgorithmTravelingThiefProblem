@@ -80,3 +80,4 @@ performance_analysis/
 *.cd
 *.log
 reports/
+deploy/

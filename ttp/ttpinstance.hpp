@@ -1,5 +1,5 @@
-#ifndef TTPINSTANCE_H
-#define TTPINSTANCE_H
+#ifndef TTPINSTANCE_HPP
+#define TTPINSTANCE_HPP
 
 #include <string>
 #include <fstream>
@@ -110,4 +110,4 @@ public:
     bool isValidIndividual( TTPIndividual& individual );
 };
 
-#endif // TTPINSTANCE_H
+#endif // TTPINSTANCE_HPP
