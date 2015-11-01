@@ -339,7 +339,7 @@ TTPGAConfig TTPGAConfig::readTTPGAConfigFromFile( std::string fileNamePath )
         }
     }
 
-    if( count < 10 )
+    if( count < 11 )
     {
         throw std::invalid_argument( std::string( "The configuration file " ) + fileNamePath +
                                      " does not have enough parameters to fill TTPGAConfig" );

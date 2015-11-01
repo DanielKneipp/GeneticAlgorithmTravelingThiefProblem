@@ -120,28 +120,9 @@ void TTPInstance::readProblem( const std::string& fileName )
         }
     }
 
-    // Fill the distance matrix.
-    this->fillDistanceMatrix();
-
     // Calculate the number of items per city.
     // -1 to remove the first city (that don't have items).
     this->numItemsPerCity = this->numItems / ( this->numCities - 1 );
-}
-
-bool TTPInstance::fillDistanceMatrix()
-{
-    this->distMatrix.resize( this->numCities );
-
-    for( unsigned long i = 0; i < this->numCities; i++ )
-    {
-        this->distMatrix[ i ].resize( this->numCities );
-        for( unsigned long j = 0; j < this->numCities; j++ )
-        {
-            this->distMatrix[ i ][ j ] = this->cities[ i ].euclDistTo( this->cities[ j ] );
-        }
-    }
-
-    return true;
 }
 
 void TTPInstance::evaluateIndividual( TTPIndividual& individual )
@@ -166,7 +147,7 @@ void TTPInstance::evaluateIndividual( TTPIndividual& individual )
 
     // Get the penalty of the first city to the second that the totalWeight is 0.
     // -1 because index of the city i is i but his position in the vector of cities is i-1 (starts with 0 instead of 1).
-    totalPenalty += this->distMatrix[ individual.features.tour[ 0 ] - 1 ][ individual.features.tour[ 1 ] - 1 ] / this->speedMax;
+    totalPenalty += this->cities[ individual.features.tour[ 0 ] - 1 ].euclDistTo( this->cities[ individual.features.tour[ 1 ] - 1 ] ) / ( this->speedMax );
     for( unsigned long i = 1; i < this->numCities; i++ )
     {
         // Calculate the total weight of the picked items in the city i.
@@ -177,7 +158,7 @@ void TTPInstance::evaluateIndividual( TTPIndividual& individual )
             totalWeight += this->items[ itemPos ].weight * individual.features.pickingPlan[ itemPos ];
         }
 
-        totalPenalty += this->distMatrix[ individual.features.tour[ i ] - 1 ][ individual.features.tour[ i + 1 ] - 1 ] /
+        totalPenalty += this->cities[ individual.features.tour[ i ] - 1 ].euclDistTo( this->cities[ individual.features.tour[ i + 1 ] - 1 ] ) /
                         ( this->speedMax - v * static_cast< double >( totalWeight ) );
     }
 
