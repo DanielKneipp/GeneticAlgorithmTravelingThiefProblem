@@ -81,10 +81,15 @@ void TTPGA::run()
     this->population = this->generatePopulation( this->gaConfig.NUM_INDIVIDUALS );
     this->problem.evaluateIndividuals( this->population );
 
-    TTPIndividual bestIndCurr = this->getBestNIndividuals( 1 )[ 0 ];
+    TTPIndividual bestIndCurr;
+    if( this->gaConfig.MAX_GENS_WITHOUT_IMPROV != 0 )
+    {
+        bestIndCurr = this->getBestNIndividuals( 1 )[ 0 ];
+    }
     
 
-    while( countGensWithoutImprov < this->gaConfig.MAX_GENS_WITHOUT_IMPROV && 
+    while( ( this->gaConfig.MAX_GENS_WITHOUT_IMPROV == 0 ||
+             countGensWithoutImprov < this->gaConfig.MAX_GENS_WITHOUT_IMPROV ) &&
            ( this->gaConfig.MAX_EXEC_TIME.count() == 0 || 
              milliExecTime.count() < this->gaConfig.MAX_EXEC_TIME.count() ) )
     {
@@ -119,14 +124,17 @@ void TTPGA::run()
 
         TTPIndividual bestIndGen = this->getBestNIndividuals( 1 )[ 0 ];
 
-        if( bestIndGen.fitness <= bestIndCurr.fitness )
+        if( this->gaConfig.MAX_GENS_WITHOUT_IMPROV != 0 )
         {
-            countGensWithoutImprov++;
-        } 
-        else 
-        {
-            countGensWithoutImprov = 0;
-            bestIndCurr = bestIndGen;
+            if( bestIndGen.fitness <= bestIndCurr.fitness )
+            {
+                countGensWithoutImprov++;
+            }
+            else
+            {
+                countGensWithoutImprov = 0;
+                bestIndCurr = bestIndGen;
+            }
         }
 
 #ifdef __GA_DETAILED_COUT_
