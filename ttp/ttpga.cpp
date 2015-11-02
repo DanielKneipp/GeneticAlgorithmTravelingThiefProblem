@@ -169,6 +169,7 @@ std::vector< TTPIndividual > TTPGA::generatePopulation( unsigned numIndividuals 
 {
     std::vector< TTPIndividual > population;
     population.reserve( numIndividuals );
+    std::string lkOutName = std::string( "lk_") + this->problem.probFileName + ".tour.temp";
 
     for( unsigned i = 0; i < numIndividuals; i++ )
     {
@@ -176,7 +177,7 @@ std::vector< TTPIndividual > TTPGA::generatePopulation( unsigned numIndividuals 
 
 
         //** Generating TSP component **//
-        individual.features.tour = this->getLinkernTour( "lk.tour.temp", true );
+        individual.features.tour = this->getLinkernTour( lkOutName, true );
 
 
         //** Generating KP component **//
