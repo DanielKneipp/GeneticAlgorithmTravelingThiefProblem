@@ -1,8 +1,8 @@
 #include "city.hpp"
 
 City::City() : index( 0 ),
-               xCord( 0 ),
-               yCord( 0 ),
+               xCord( 0.0 ),
+               yCord( 0.0 ),
                totalProfit( 0 ),
                totalWeight( 0 ),
                pwRatio( 0.0 )
@@ -10,10 +10,8 @@ City::City() : index( 0 ),
 
 double City::euclDistTo( const City& dst )
 {
-    double diffX = std::pow( static_cast< double >( this->xCord ) -
-                             static_cast< double >( dst.xCord ), 2 );
-    double diffY = std::pow( static_cast< double >( this->yCord ) -
-                             static_cast< double >( dst.yCord ), 2 );
+    double diffX = std::pow( this->xCord - dst.xCord, 2 );
+    double diffY = std::pow( this->yCord - dst.yCord, 2 );
 
     return std::sqrt( diffX + diffY );
 }

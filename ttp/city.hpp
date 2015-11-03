@@ -11,9 +11,9 @@ public:
     /** City index. */
     unsigned long index;
     /** Coordinate of the city on the x axis. */
-    unsigned long xCord;
+    double xCord;
     /** Coordinate of the city on the y axis. */
-    unsigned long yCord;
+    double yCord;
     /** Sum of profit (value) of all items that belongs to this city. */
     unsigned long long totalProfit;
     /** Sum of weight of all items that belongs to this city. */

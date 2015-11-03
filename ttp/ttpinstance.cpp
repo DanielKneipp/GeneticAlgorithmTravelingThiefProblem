@@ -67,9 +67,9 @@ void TTPInstance::readProblem( const std::string& fileName )
                     file >> tmpString;
                     this->cities[ i ].index = std::stoul( tmpString );
                     file >> tmpString;
-                    this->cities[ i ].xCord = std::stoul( tmpString );
+                    this->cities[ i ].xCord = std::stod( tmpString );
                     file >> tmpString;
-                    this->cities[ i ].yCord = std::stoul( tmpString );
+                    this->cities[ i ].yCord = std::stod( tmpString );
                     this->cities[ i ].totalProfit = 0;
                     this->cities[ i ].totalWeight = 0;
                 }
