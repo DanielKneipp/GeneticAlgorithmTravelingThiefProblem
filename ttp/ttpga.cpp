@@ -206,9 +206,9 @@ std::vector< unsigned long > TTPGA::getLinkernTour( std::string lkOutFileNamePat
     command += std::string( " -o " ) + lkOutFileNamePath;
     if( this->gaConfig.MAX_EXEC_TIME.count() != 0 )
     {
-        // Maximum execution time for linkern to generate all individuals = 65% of the total execution time.
+        // Maximum execution time for linkern to generate all individuals = 60% of the total execution time.
         double maxTime = std::chrono::duration_cast< std::chrono::seconds >
-                                                   ( this->gaConfig.MAX_EXEC_TIME ).count() * 0.65 / this->gaConfig.NUM_INDIVIDUALS;
+                                                   ( this->gaConfig.MAX_EXEC_TIME ).count() * 0.60 / this->gaConfig.NUM_INDIVIDUALS;
         command += " -t " + std::to_string( maxTime );
     }
     // Run silently.
